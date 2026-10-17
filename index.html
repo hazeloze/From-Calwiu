@@ -3,199 +3,228 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b12">
+<meta name="description" content="From Calwiu eFootball Build Lab">
 <title>From Calwiu | eFootball Build Lab</title>
-<meta name="theme-color" content="#080b14">
-
 <style>
-:root {
-  --bg:#080b14;
-  --panel:#111827;
-  --panel2:#172033;
-  --text:#f4f7ff;
-  --muted:#9aa8bf;
-  --accent:#65f5bb;
-  --blue:#7194ff;
-  --border:#263249;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:radial-gradient(ellipse at top,#182544 0%,var(--bg) 55%);
-  color:var(--text);
-  font-family:system-ui,-apple-system,Arial,sans-serif;
-}
-header {
-  padding:25px 16px 20px;
-  border-bottom:1px solid var(--border);
-  background:#080b14cc;
-}
-.wrap { max-width:1100px; margin:auto; }
-.brand {
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.logo {
-  width:45px;height:45px;border-radius:14px;
-  background:linear-gradient(135deg,var(--accent),var(--blue));
-  color:#08111a;display:grid;place-items:center;
-  font-size:20px;font-weight:1000;
-}
-h1 {font-size:24px;margin:0;letter-spacing:-.7px;}
-.tag {color:var(--accent);font-size:11px;font-weight:800;letter-spacing:2px;}
-.hero {padding:30px 0 22px;}
-.hero h2 {font-size:clamp(28px,6vw,46px);line-height:1.08;margin:0 0 12px;}
-.hero h2 span {color:var(--accent);}
-p {line-height:1.6;}
-.muted {color:var(--muted);}
-.actions {display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
-input,select,button {
-  font:inherit;border-radius:12px;padding:12px 14px;
-}
-input,select {
-  color:var(--text);background:var(--panel);
-  border:1px solid var(--border);min-width:0;
-}
-button {
-  border:0;background:var(--accent);color:#06130f;
-  font-weight:800;cursor:pointer;
-}
-button.secondary {
-  background:var(--panel2);color:var(--text);
-  border:1px solid var(--border);
-}
-.tools {display:grid;grid-template-columns:1fr 160px 150px;gap:10px;margin:18px 0;}
-.status {font-size:12px;color:var(--muted);margin:12px 0;}
-.grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
-.card {
-  background:linear-gradient(155deg,#18233a,#0f1523);
-  border:1px solid var(--border);border-radius:20px;
-  padding:17px;min-width:0;overflow:hidden;
-}
-.card:hover {border-color:#65f5bb99;transform:translateY(-2px);}
-.card {transition:.2s;}
-.cardtop {display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
-.pos {font-size:11px;color:var(--accent);font-weight:900;letter-spacing:1px;}
-.name {font-size:23px;font-weight:900;margin-top:5px;overflow-wrap:anywhere;}
-.rating {font-size:29px;font-weight:1000;color:var(--accent);}
-.sub {font-size:12px;color:var(--muted);margin-top:5px;}
-.avatar {
-  margin:17px 0 13px;min-height:100px;border-radius:15px;
-  background:linear-gradient(135deg,#263a5d,#111b2b);
-  display:flex;align-items:center;justify-content:center;
-  font-size:43px;font-weight:1000;color:#e7fff5;
-  border:1px solid #344665;
-}
-.pills {display:flex;flex-wrap:wrap;gap:6px;}
-.pill {background:#263249;border-radius:8px;padding:6px 9px;font-size:11px;}
-.build {margin-top:15px;border-top:1px solid var(--border);padding-top:12px;}
-.build strong {color:var(--accent);}
-.card button {width:100%;margin-top:14px;}
-.section {padding:22px 0 40px;}
-.section h2 {font-size:23px;margin-bottom:5px;}
-footer {border-top:1px solid var(--border);padding:24px 16px;text-align:center;color:var(--muted);font-size:12px;}
-.empty {padding:25px;text-align:center;color:var(--muted);grid-column:1/-1;}
-.overlay {
-  display:none;position:fixed;inset:0;background:#000c;
-  z-index:10;align-items:center;justify-content:center;padding:18px;
-}
-.modal {
-  width:100%;max-width:450px;max-height:85vh;overflow:auto;
-  background:var(--panel);border:1px solid var(--border);
-  padding:22px;border-radius:20px;
-}
-.modal h2 {margin-top:0;}
-.modal button {margin-top:10px;}
-@media(max-width:760px) {
-  .grid {grid-template-columns:repeat(2,minmax(0,1fr));}
-  .tools {grid-template-columns:1fr 1fr;}
-  .tools input {grid-column:1/-1;width:100%;}
-}
-@media(max-width:460px) {
-  .grid {grid-template-columns:1fr;}
-  .name {font-size:25px;}
-  .card {padding:18px;}
-}
+:root{--bg:#080b12;--panel:#111722;--line:#253044;--text:#f4f7ff;--muted:#9ca9bd;--green:#a8ff60;--blue:#76b7ff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#172238 0,#080b12 52%);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+header{border-bottom:1px solid var(--line);padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:21px;font-weight:900;letter-spacing:1px}.logo span{color:var(--green)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.lang,.outline{background:#151d2a;color:white;border:1px solid #344259;padding:10px 14px;border-radius:10px}
+main{max-width:1100px;margin:auto;padding:34px 18px 60px}
+.hero{padding:30px 0 24px}
+.tag{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:bold}
+h1{font-size:clamp(34px,7vw,62px);line-height:1.02;margin:14px 0}
+h1 span{color:var(--green)}
+p{color:var(--muted);line-height:1.6}
+.searchrow{display:flex;gap:10px;margin:24px 0;flex-wrap:wrap}
+input,select,textarea{background:#111722;color:white;border:1px solid #344259;border-radius:11px;padding:13px;min-width:0;width:100%}
+.searchrow input{flex:1;min-width:180px}
+.primary{background:var(--green);color:#10150b;border:0;border-radius:11px;padding:13px 18px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}
+.stat,.card,.adminbox{background:linear-gradient(145deg,#151e2c,#0e131d);border:1px solid var(--line);border-radius:16px;padding:18px}
+.stat strong{display:block;font-size:24px;color:var(--green)}
+.stat small{color:var(--muted)}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:30px 0 14px}
+h2{font-size:23px;margin:0}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters select{padding:10px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cardtop{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.position{font-size:11px;color:var(--green);font-weight:bold;letter-spacing:1px}
+.player{font-size:22px;font-weight:900;margin:8px 0}
+.rating{font-size:28px;font-weight:900;color:var(--green)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.pill{background:#202b3d;color:#c8d7ed;padding:6px 9px;border-radius:7px;font-size:12px}
+.build{border-top:1px solid var(--line);padding-top:13px;margin-top:13px}
+.build b{color:#fff}.build p{margin:7px 0;font-size:14px}
+.notice{background:#101b27;border:1px solid #29405a;border-radius:12px;padding:13px;color:#b8c8dc;font-size:13px}
+.empty{display:none;text-align:center;padding:30px;color:var(--muted)}
+footer{border-top:1px solid var(--line);text-align:center;padding:25px;color:var(--muted);font-size:13px}
+.card{cursor:pointer;transition:transform .2s,border-color .2s;overflow-wrap:anywhere}
+.card:hover{border-color:var(--green);transform:translateY(-2px)}
+.detailOverlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;display:none;align-items:center;justify-content:center;padding:18px}
+.detailBox{width:100%;max-width:480px;max-height:90vh;overflow:auto;background:#111722;border:1px solid #344259;border-radius:18px;padding:24px}
+.detailBox h2{color:var(--green);margin:16px 0}
+.closeDetail{float:right;background:#253044;color:white;border:0;border-radius:8px;padding:9px 13px}
+.playerphoto{width:100%;max-height:250px;object-fit:contain;margin:12px 0;border-radius:10px}
+.adminbox{margin:35px 0}
+.adminbox h2{margin-bottom:15px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;color:var(--muted)}
+.full{grid-column:1/-1}
+.formbuttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.adminstatus{font-size:13px;color:var(--green);margin:12px 0}
+.adminlist{display:grid;gap:8px;margin-top:15px}
+.adminitem{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#182235;border-radius:10px;padding:10px}
+.adminitem span{overflow-wrap:anywhere}
+.smallbtn{background:#26344a;color:white;border:1px solid #40516c;border-radius:8px;padding:8px 11px}
+.hidden{display:none!important}
+@media(max-width:620px){.cards{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:18px}header{padding:15px 18px}main{padding-top:20px}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
-
 <body>
 <header>
-  <div class="wrap brand">
-    <div class="logo">FC</div>
-    <div>
-      <h1>FROM CALWIU</h1>
-      <div class="tag">eFOOTBALL BUILD LAB</div>
-    </div>
-  </div>
+  <div class="logo">FROM <span>CALWIU</span></div>
+  <button class="lang" id="langBtn">മലയാളം</button>
 </header>
 
-<main class="wrap" style="padding:0 16px">
-  <section class="hero">
-    <div class="tag">YOUR PLAYERS. YOUR BUILDS.</div>
-    <h2>Build your dream squad.<br><span>Play your way.</span></h2>
-    <p class="muted" id="intro">
-      Explore player cards, compare ratings and create your ultimate squad.
-    </p>
-    <div class="actions">
-      <button onclick="document.getElementById('players').scrollIntoView({behavior:'smooth'})">
-        Explore Players ↘
-      </button>
-      <button class="secondary" id="langBtn">മലയാളം</button>
-    </div>
-  </section>
+<main>
+<section class="hero">
+  <div class="tag">YOUR eFOOTBALL BUILD LAB</div>
+  <h1>BUILD SMART.<br><span>PLAY BETTER.</span></h1>
+  <p id="intro">Find player progression builds, compare your options and create your best squad.</p>
+  <div class="searchrow">
+    <input id="search" placeholder="Search player — Safwan, Messi..." aria-label="Search players">
+    <button class="primary" id="searchBtn">Search Builds ↗</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong>BUILD LAB</strong><small>Player progression</small></div>
+    <div class="stat"><strong>ALL ROLES</strong><small>CF · AMF · DMF · CMF</small></div>
+    <div class="stat"><strong>COMMUNITY</strong><small>Discover better builds</small></div>
+  </div>
+</section>
 
-  <section class="section" id="players">
-    <h2>Player Database</h2>
-    <p class="muted">Discover the squad and explore each player card.</p>
+<div class="notice" id="notice">Loading player cards...</div>
 
-    <div class="tools">
-      <input id="search" type="search" placeholder="Search Safwan, Navas, Murshid...">
-      <select id="position">
-        <option value="">All Positions</option>
-        <option value="CF">CF</option>
-        <option value="AMF">AMF</option>
-        <option value="GK">GK</option>
-        <option value="CB">CB</option>
-        <option value="DMF">DMF</option>
-        <option value="RWF">RWF</option>
-        <option value="LWF">LWF</option>
+<section>
+  <div class="sectionhead">
+    <h2 id="buildTitle">Explore Builds</h2>
+    <div class="filters">
+      <select id="position" aria-label="Filter position">
+        <option value="">All positions</option>
+        <option>CF</option><option>SS</option><option>AMF</option>
+        <option>CMF</option><option>DMF</option><option>CB</option>
+        <option>GK</option><option>RWF</option><option>LWF</option>
       </select>
-      <select id="sort">
-        <option value="rating">Highest Rating</option>
-        <option value="name">Player Name</option>
+      <select id="sort" aria-label="Sort builds">
+        <option value="rating">Highest rating</option>
+        <option value="name">Player name</option>
       </select>
     </div>
+  </div>
+  <div class="cards" id="cards"></div>
+  <div class="empty" id="empty">No matching players found.</div>
+</section>
 
-    <div id="status" class="status">Loading player cards...</div>
-    <div id="cards" class="grid"></div>
-  </section>
+<section style="margin-top:30px">
+  <div class="sectionhead"><h2 id="aboutTitle">About From Calwiu</h2></div>
+  <div class="card">
+    <p id="aboutText">A player progression resource for eFootball fans.</p>
+    <p>Independent fan project. Not affiliated with KONAMI.</p>
+  </div>
+</section>
 
-  <section class="section">
-    <h2>About From Calwiu</h2>
-    <p class="muted">
-      A fan-made eFootball player build project. Demo ratings are created
-      for fun and are not official game ratings. Published database cards
-      can be displayed here as the project grows.
-    </p>
-  </section>
+<!-- ADMIN PANEL -->
+<section class="adminbox" id="adminSection">
+  <div class="tag">PRIVATE AREA</div>
+  <h2>Admin Panel 🔐</h2>
+  <p>Login to add players, update ratings and attach player-card images.</p>
+
+  <div id="loginArea">
+    <div class="formgrid">
+      <div class="field">
+        <label for="adminEmail">Admin email</label>
+        <input id="adminEmail" type="email" autocomplete="username" placeholder="Your Supabase admin email">
+      </div>
+      <div class="field">
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Your admin password">
+      </div>
+    </div>
+    <div class="formbuttons">
+      <button class="primary" id="loginBtn">Admin Login</button>
+    </div>
+  </div>
+
+  <div id="adminArea" class="hidden">
+    <p id="signedInAs"></p>
+    <div class="formbuttons">
+      <button class="outline" id="safwanTemplate">Load Safwan 110 CF Template 👑</button>
+      <button class="outline" id="newPlayerBtn">+ New Player</button>
+      <button class="outline" id="logoutBtn">Logout</button>
+    </div>
+
+    <form id="playerForm" style="margin-top:20px">
+      <input id="editId" type="hidden">
+      <div class="formgrid">
+        <div class="field">
+          <label for="playerName">Player name *</label>
+          <input id="playerName" required maxlength="100" placeholder="Safwan">
+        </div>
+        <div class="field">
+          <label for="cardName">Card name</label>
+          <input id="cardName" maxlength="120" placeholder="The Boss">
+        </div>
+        <div class="field">
+          <label for="playerPosition">Position *</label>
+          <select id="playerPosition" required>
+            <option value="CF">CF</option><option value="SS">SS</option>
+            <option value="AMF">AMF</option><option value="CMF">CMF</option>
+            <option value="DMF">DMF</option><option value="CB">CB</option>
+            <option value="GK">GK</option><option value="RWF">RWF</option>
+            <option value="LWF">LWF</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="playerRating">Overall rating *</label>
+          <input id="playerRating" type="number" min="1" max="120" value="110" required>
+        </div>
+        <div class="field">
+          <label for="playerStyle">Playstyle</label>
+          <input id="playerStyle" maxlength="100" placeholder="Goal Poacher">
+        </div>
+        <div class="field">
+          <label for="playerType">Card type</label>
+          <input id="playerType" maxlength="100" placeholder="Epic / Fun Card">
+        </div>
+        <div class="field full">
+          <label for="playerImage">Player photo URL</label>
+          <input id="playerImage" type="url" placeholder="https://example.com/player-image.jpg">
+        </div>
+        <div class="field full">
+          <label for="playerDialogue">Fun dialogue / description</label>
+          <textarea id="playerDialogue" rows="3" placeholder="110 Rating ആണ് മോനേ… Nerf ചെയ്യാൻ KONAMI പോലും പേടിക്കും! 😂"></textarea>
+        </div>
+        <div class="field full">
+          <label for="playerBuild">Progression notes</label>
+          <textarea id="playerBuild" rows="2" placeholder="Build information"></textarea>
+        </div>
+        <div class="field full">
+          <label><input id="playerPublished" type="checkbox" checked style="width:auto"> Publish this player on the website</label>
+        </div>
+      </div>
+      <div class="formbuttons">
+        <button class="primary" type="submit" id="savePlayerBtn">Save Player</button>
+        <button class="outline" type="button" id="cancelEditBtn">Clear Form</button>
+      </div>
+    </form>
+    <div class="adminstatus" id="adminStatus"></div>
+    <h3>Manage Published / Saved Cards</h3>
+    <div id="adminList" class="adminlist"></div>
+  </div>
+</section>
 </main>
 
-<footer>
-  FROM CALWIU · FAN-MADE PROJECT · <span id="year"></span>
-</footer>
-
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="tag">PLAYER PROFILE</div>
-    <h2 id="detailName">Player</h2>
-    <p id="detailPosition" class="muted"></p>
+<div class="detailOverlay" id="detailOverlay">
+  <div class="detailBox">
+    <button class="closeDetail" id="closeDetail">✕ Close</button>
+    <h2 id="detailName">Player Details</h2>
+    <img id="detailImage" class="playerphoto hidden" alt="Player card">
+    <p id="detailPosition"></p>
     <p id="detailRating"></p>
-    <p id="detailStyle"></p>
-    <p id="detailInfo" class="muted"></p>
-    <button id="closeModal">Close</button>
+    <p id="detailRole"></p>
+    <p id="detailBuild"></p>
+    <p id="detailNote"></p>
   </div>
 </div>
+
+<footer>© <span id="year"></span> From Calwiu · eFootball Build Lab<br>Independent fan project. Not affiliated with KONAMI.</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -207,101 +236,108 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_KEY
 );
 
-// These are fictional fun cards, not official eFootball ratings.
-const demoPlayers = [
+const FUN_PLAYERS = [
   {
-    id:"demo-safwan", name:"Safwan", pos:"AMF", rating:99,
-    role:"Calwiu Playmaker", cardName:"The Boss",
-    info:"Creator of the squad. A special fun card made for Safwan.",
-    emoji:"👑", demo:true
+    id:"fun-safwan", name:"Safwan", cardName:"The Boss",
+    pos:"CF", rating:110, role:"Goal Poacher",
+    build:"Special fun player card.",
+    note:"110 Rating ആണ് മോനേ… Nerf ചെയ്യാൻ KONAMI പോലും പേടിക്കും! 😂🔥",
+    image:"", stats:{funDialogue:"110 Rating ആണ് മോനേ… Nerf ചെയ്യാൻ KONAMI പോലും പേടിക്കും! 😂🔥"},
+    demo:true
   },
   {
-    id:"demo-navas", name:"Navas", pos:"GK", rating:97,
-    role:"Guardian", cardName:"The Wall",
-    info:"The squad's goalkeeper. A fictional fun card.",
-    emoji:"🧤", demo:true
+    id:"fun-navas", name:"Navas", cardName:"The Wall",
+    pos:"GK", rating:97, role:"Goalkeeper",
+    build:"Special fun player card.", note:"Navas — The Wall 🧤",
+    image:"", stats:{}, demo:true
   },
   {
-    id:"demo-murshid", name:"Murshid", pos:"CF", rating:98,
-    role:"Goal Poacher", cardName:"Goal Machine",
-    info:"The striker of the squad. A fictional fun card.",
-    emoji:"⚽", demo:true
+    id:"fun-murshid", name:"Murshid", cardName:"Goal Machine",
+    pos:"CF", rating:98, role:"Goal Poacher",
+    build:"Special fun player card.", note:"Murshid — Goal Machine ⚽",
+    image:"", stats:{}, demo:true
   }
 ];
 
-let players = [...demoPlayers];
+let players = [...FUN_PLAYERS];
+let databasePlayers = [];
+let currentSession = null;
 let malayalam = false;
 
-const cards = document.getElementById("cards");
-const statusBox = document.getElementById("status");
+const el = id => document.getElementById(id);
+const cards = el("cards");
+
+function safeText(value) {
+  return value == null ? "" : String(value);
+}
+
+function normalizePlayer(p) {
+  const stats = p.stats || {};
+  return {
+    id:p.id,
+    name:p.player_name || p.name || "Unknown Player",
+    cardName:p.card_name || p.cardName || "",
+    pos:p.position || p.pos || "N/A",
+    rating:p.overall_rating ?? p.rating ?? "—",
+    role:p.playstyle || p.card_type || p.role || "Not specified",
+    build:stats.progression || p.build || "Player card loaded from database.",
+    note:stats.funDialogue || stats.note || p.note || "",
+    image:p.image_url || p.image || "",
+    stats,
+    demo:!!p.demo
+  };
+}
 
 async function loadPlayers() {
-  statusBox.textContent = "Connecting to the player database...";
+  el("notice").textContent = "Connecting to player database...";
 
   try {
-    const { data, error } = await supabaseClient
+    const {data,error} = await supabaseClient
       .from("player_cards")
-      .select("id, player_name, card_name, card_type, position, overall_rating, playstyle, image_url, stats, is_published")
-      .eq("is_published", true)
-      .order("created_at", { ascending: false });
+      .select("id, player_name, card_name, card_type, position, overall_rating, playstyle, image_url, stats, is_published, created_at")
+      .eq("is_published",true)
+      .order("created_at",{ascending:false});
 
     if (error) throw error;
 
-    const databasePlayers = (data || []).map(p => ({
-      id:p.id,
-      name:p.player_name || "Unknown Player",
-      pos:p.position || "N/A",
-      rating:p.overall_rating ?? "—",
-      role:p.playstyle || p.card_type || "Player",
-      cardName:p.card_name || "Player Card",
-      info:"Loaded from the published player database.",
-      image:p.image_url || "",
-      stats:p.stats || {},
-      demo:false
-    }));
+    databasePlayers = (data || []).map(normalizePlayer);
 
-    players = [...demoPlayers, ...databasePlayers];
+    const dbNames = new Set(databasePlayers.map(p => p.name.toLowerCase()));
+    players = [
+      ...FUN_PLAYERS.filter(p => !dbNames.has(p.name.toLowerCase())),
+      ...databasePlayers
+    ];
 
-    statusBox.textContent =
+    el("notice").textContent =
       "Database connected · " + databasePlayers.length +
-      " published database card(s) · 3 fun demo cards";
-
+      " published database card(s). Fun cards are labelled as examples.";
   } catch (error) {
-    console.error("Database connection error:", error);
-    players = [...demoPlayers];
-    statusBox.textContent =
-      "Showing 3 fun demo cards. Database connection needs checking.";
+    console.error("Supabase load error:",error);
+    players = [...FUN_PLAYERS];
+    el("notice").textContent =
+      "Showing fun demo cards. Database connection or permissions need checking.";
   }
 
-  renderPlayers();
+  render();
+  if (currentSession) loadAdminList();
 }
 
-function renderPlayers() {
-  const query = document.getElementById("search").value
-    .toLowerCase().trim();
-  const position = document.getElementById("position").value;
-  const sort = document.getElementById("sort").value;
-
+function render() {
+  const q = el("search").value.toLowerCase().trim();
+  const pos = el("position").value;
   let list = players.filter(p =>
-    p.name.toLowerCase().includes(query) &&
-    (!position || p.pos === position)
+    p.name.toLowerCase().includes(q) && (!pos || p.pos === pos)
   );
 
-  if (sort === "name") {
+  if (el("sort").value === "name") {
     list.sort((a,b) => a.name.localeCompare(b.name));
   } else {
-    list.sort((a,b) =>
-      (Number(b.rating) || 0) - (Number(a.rating) || 0)
-    );
+    list.sort((a,b) => (Number(b.rating)||0) - (Number(a.rating)||0));
   }
 
   cards.innerHTML = "";
-
-  if (!list.length) {
-    cards.innerHTML =
-      '<div class="empty">No players found. Try another search.</div>';
-    return;
-  }
+  el("empty").style.display = list.length ? "none" : "block";
+  el("empty").textContent = "No matching players found. Try another name or position.";
 
   list.forEach(p => {
     const card = document.createElement("article");
@@ -309,97 +345,162 @@ function renderPlayers() {
 
     const top = document.createElement("div");
     top.className = "cardtop";
-
     const left = document.createElement("div");
 
-    const pos = document.createElement("div");
-    pos.className = "pos";
-    pos.textContent = p.pos + " · " +
-      (p.demo ? "FUN CARD" : "PLAYER CARD");
+    const position = document.createElement("div");
+    position.className = "position";
+    position.textContent = p.pos + " · PLAYER BUILD";
 
     const name = document.createElement("div");
-    name.className = "name";
+    name.className = "player";
     name.textContent = p.name;
 
-    const subtitle = document.createElement("div");
-    subtitle.className = "sub";
-    subtitle.textContent = p.cardName || "Player Card";
-
-    left.append(pos, name, subtitle);
+    const cardName = document.createElement("div");
+    cardName.className = "pills";
+    const cardPill = document.createElement("span");
+    cardPill.className = "pill";
+    cardPill.textContent = p.cardName || (p.demo ? "FUN CARD" : "PLAYER CARD");
+    left.append(position,name,cardName);
+    cardName.append(cardPill);
 
     const rating = document.createElement("div");
     rating.className = "rating";
     rating.textContent = p.rating;
-
-    top.append(left, rating);
+    top.append(left,rating);
     card.append(top);
 
     if (p.image) {
       const img = document.createElement("img");
+      img.className = "playerphoto";
       img.src = p.image;
-      img.alt = p.name + " player card";
+      img.alt = p.name + " player photo";
       img.loading = "lazy";
-      img.style.cssText =
-        "width:100%;max-height:210px;object-fit:contain;margin-top:14px";
+      img.onerror = () => { img.style.display = "none"; };
       card.append(img);
-    } else {
-      const avatar = document.createElement("div");
-      avatar.className = "avatar";
-      avatar.textContent = p.emoji ||
-        p.name.slice(0,1).toUpperCase();
-      card.append(avatar);
     }
 
     const pills = document.createElement("div");
     pills.className = "pills";
-
-    [p.role || "Player", p.demo ? "FUN / DEMO" : "DATABASE"]
-      .forEach(value => {
-        const pill = document.createElement("span");
-        pill.className = "pill";
-        pill.textContent = value;
-        pills.append(pill);
-      });
-
+    const role = document.createElement("span");
+    role.className = "pill";
+    role.textContent = p.role;
+    const source = document.createElement("span");
+    source.className = "pill";
+    source.textContent = p.demo ? "FUN DEMO" : "DATABASE CARD";
+    pills.append(role,source);
     card.append(pills);
 
     const build = document.createElement("div");
     build.className = "build";
-
-    const label = document.createElement("strong");
-    label.textContent = p.demo
-      ? "Special Fun Card"
-      : "Published Player Card";
-
+    const heading = document.createElement("b");
+    heading.textContent = "Progression";
     const description = document.createElement("p");
-    description.className = "muted";
-    description.textContent = p.info ||
-      "Player details loaded from the database.";
-
-    build.append(label, description);
+    description.textContent = p.build;
+    const note = document.createElement("p");
+    note.textContent = p.note;
+    build.append(heading,description,note);
     card.append(build);
 
-    const viewButton = document.createElement("button");
-    viewButton.textContent = "View Player Profile ↗";
-    viewButton.addEventListener("click", () => showDetails(p));
-    card.append(viewButton);
+    card.addEventListener("click",() => showDetails(p));
+
+    if (currentSession) {
+      const edit = document.createElement("button");
+      edit.className = "outline";
+      edit.style.marginTop = "12px";
+      edit.textContent = "Edit in Admin";
+      edit.addEventListener("click",event => {
+        event.stopPropagation();
+        editPlayer(p);
+        el("adminSection").scrollIntoView({behavior:"smooth"});
+      });
+      card.append(edit);
+    }
 
     cards.append(card);
   });
 }
 
 function showDetails(p) {
-  document.getElementById("detailName").textContent = p.name;
-  document.getElementById("detailPosition").textContent =
-    "Position: " + p.pos;
-  document.getElementById("detailRating").textContent =
-    "Overall Rating: " + p.rating;
-  document.getElementById("detailStyle").textContent =
-    "Playstyle: " + (p.role || "Not specified");
-  document.getElementById("detailInfo").textContent =
-    (p.demo ? "Fun demo card · " : "Database card · ") +
-    (p.info || "");
-  document.getElementById("overlay").style.display = "flex";
+  el("detailName").textContent = p.name + (p.cardName ? " — " + p.cardName : "");
+  el("detailPosition").textContent = "Position: " + p.pos;
+  el("detailRating").textContent = "Overall Rating: " + p.rating;
+  el("detailRole").textContent = "Playstyle: " + p.role;
+  el("detailBuild").textContent = "Progression: " + p.build;
+  el("detailNote").textContent = p.note || "No additional information yet.";
+
+  const img = el("detailImage");
+  if (p.image) {
+    img.src = p.image;
+    img.classList.remove("hidden");
+    img.onerror = () => img.classList.add("hidden");
+  } else {
+    img.removeAttribute("src");
+    img.classList.add("hidden");
+  }
+  el("detailOverlay").style.display = "flex";
 }
 
-document.getElementById("search").add
+function setAdminUI(session) {
+  currentSession = session;
+  el("loginArea").classList.toggle("hidden",!!session);
+  el("adminArea").classList.toggle("hidden",!session);
+  if (session) {
+    el("signedInAs").textContent = "Signed in: " + (session.user.email || "Admin");
+    loadAdminList();
+  }
+  render();
+}
+
+async function login() {
+  const email = el("adminEmail").value.trim();
+  const password = el("adminPassword").value;
+  if (!email || !password) {
+    el("adminStatus").textContent = "Enter your admin email and password.";
+    return;
+  }
+
+  el("adminStatus").textContent = "Signing in...";
+  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
+
+  if (error) {
+    el("adminStatus").textContent = "Login failed: " + error.message;
+    return;
+  }
+
+  el("adminPassword").value = "";
+  setAdminUI(data.session);
+  el("adminStatus").textContent = "Login successful.";
+}
+
+async function logout() {
+  const {error} = await supabaseClient.auth.signOut();
+  if (error) {
+    el("adminStatus").textContent = "Logout failed: " + error.message;
+    return;
+  }
+  setAdminUI(null);
+  el("adminStatus").textContent = "Logged out.";
+}
+
+function clearForm() {
+  el("playerForm").reset();
+  el("editId").value = "";
+  el("playerRating").value = "110";
+  el("playerPosition").value = "CF";
+  el("playerPublished").checked = true;
+  el("savePlayerBtn").textContent = "Save Player";
+}
+
+function fillSafwanTemplate() {
+  clearForm();
+  el("playerName").value = "Safwan";
+  el("cardName").value = "The Boss";
+  el("playerPosition").value = "CF";
+  el("playerRating").value = "110";
+  el("playerStyle").value = "Goal Poacher";
+  el("playerType").value = "Special Fun Card";
+  el("playerDialogue").value =
+    "😂 110 Rating ആണ് മോനേ… Nerf ചെയ്യാൻ KONAMI പോലും പേടിക്കും! 🔥";
+  el("playerBuild").value = "Special fun player card. Not an official rating.";
+  el("adminStatus").textContent =
+    "Safwan template loaded. Add a photo URL if available, then p
