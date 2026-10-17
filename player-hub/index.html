@@ -1,12 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EF Player Hub</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07101d"><meta name="description" content="Explore eFootball player cards and player profiles.">
+  <title>EF Player Hub — eFootball Cards</title><link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>EF Player Hub</h1>
-  <p>Coming Soon!</p>
-</body>
-</html>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">EF</span><span>PLAYER<span class="accent">HUB</span><small>eFOOTBALL DATABASE</small></span></a>
+    <nav><a class="nav-link active" href="#players">Players</a><button id="admin-open" class="button button-ghost" type="button">Admin login</button></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy"><p class="eyebrow"><span class="live-dot"></span> COMMUNITY PLAYER DATABASE</p><h1>Find your next<br><span class="gradient-text">game changer.</span></h1><p class="hero-sub">Explore player cards, ratings and positions from the eFootball universe.</p><a class="button button-primary" href="#players">Explore players <span aria-hidden="true">↘</span></a></div>
+      <div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="hero-card"><div class="hero-card-top">EF <span>PLAYER HUB</span></div><div class="hero-silhouette">✦</div><div class="hero-card-bottom"><span>PLAYER<br><b>DATABASE</b></span><strong>01</strong></div></div><div class="art-label">BUILD YOUR<br>ULTIMATE SQUAD</div></div>
+    </section>
+    <section id="players" class="players-section">
+      <div class="section-heading"><div><p class="eyebrow">THE COLLECTION</p><h2>Player <span class="accent">library</span></h2></div><span id="player-count" class="count-pill">Loading players…</span></div>
+      <div class="toolbar"><label class="searchbox"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search players…" autocomplete="off"></label><select id="position-filter" aria-label="Filter by position"><option value="">All positions</option><option>CF</option><option>SS</option><option>LWF</option><option>RWF</option><option>AMF</option><option>CMF</option><option>DMF</option><option>LMF</option><option>RMF</option><option>LB</option><option>RB</option><option>CB</option><option>GK</option></select><select id="sort" aria-label="Sort players"><option value="rating">Highest rating</option><option value="name">Name A–Z</option><option value="newest">Recently added</option></select></div>
+      <div id="notice" class="notice hidden" role="status"></div><div id="player-grid" class="player-grid"><div class="empty-state">Connecting to player database…</div></div>
+    </section>
+    <section class="bottom-banner"><div><p class="eyebrow">YOUR DATABASE, YOUR RULES</p><h2>More cards. More possibilities.</h2><p>Player profiles are maintained by the site administrator.</p></div><a href="#players" class="button button-ghost">Browse collection ↗</a></section>
+  </main>
+  <footer><a class="brand brand-small" href="#"><span class="brand-mark">EF</span><span>PLAYER<span class="accent">HUB</span></span></a><span>Unofficial fan-made player database. Not affiliated with KONAMI.</span><span>© <span id="year"></span> EF Player Hub</span></footer>
+
+  <dialog id="player-dialog" class="modal player-modal"><button class="modal-close" data-close="player-dialog" aria-label="Close">×</button><div id="player-detail"></div></dialog>
+  <dialog id="admin-dialog" class="modal admin-modal"><button class="modal-close" data-close="admin-dialog" aria-label="Close">×</button><div id="admin-content"></div></dialog>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="app.js"></script>
+</body></html>
