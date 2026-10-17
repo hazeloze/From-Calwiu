@@ -128,69 +128,217 @@ footer{border-top:1px solid var(--line);text-align:center;padding:25px;color:var
 <footer>© <span id="year"></span> From Calwiu · eFootball Build Lab<br>Independent fan project. Not affiliated with KONAMI.</footer>
 
 <script>
-const players = [
- {name:"Ruud Gullit",pos:"CF",rating:95,role:"Target Forward / CF",build:"Example build — add verified progression points",note:"Check finishing, physical contact and speed for your chosen card."},
- {name:"Lionel Messi",pos:"AMF",rating:96,role:"Creative Playmaker",build:"Example build — add verified progression points",note:"Adjust dribbling, passing and finishing to your card and playstyle."},
- {name:"Kylian Mbappé",pos:"CF",rating:95,role:"Goal Poacher",build:"Example build — add verified progression points",note:"Consider speed, acceleration and finishing for a quick striker."},
- {name:"Jude Bellingham",pos:"CMF",rating:93,role:"Box-to-Box",build:"Example build — add verified progression points",note:"Balance stamina, passing, ball control and defensive contribution."},
- {name:"Rodri",pos:"DMF",rating:94,role:"Anchor Man",build:"Example build — add verified progression points",note:"Consider defensive awareness, ball winning and passing."},
- {name:"Virgil van Dijk",pos:"CB",rating:94,role:"Build Up",build:"Example build — add verified progression points",note:"Consider defensive awareness, physical contact and aerial ability."}
-];
-let malayalam=false;
-const cards=document.getElementById("cards");
-function render(){
- const q=document.getElementById("search").value.toLowerCase().trim();
- const pos=document.getElementById("position").value;
- let list=players.filter(p=>p.name.toLowerCase().includes(q)&&(!pos||p.pos===pos));
- if(document.getElementById("sort").value==="name")list.sort((a,b)=>a.name.localeCompare(b.name));
- else list.sort((a,b)=>b.rating-a.rating);
- cards.innerHTML="";
- document.getElementById("empty").style.display=list.length?"none":"block";
- list.forEach(p=>{
-  const card=document.createElement("article");card.className="card";
-  card.innerHTML=`<div class="cardtop"><div><div class="position">${p.pos} · PLAYER BUILD</div><div class="player"></div></div><div class="rating">${p.rating}</div></div><div class="pills"><span class="pill">${p.role}</span><span class="pill">Example data</span></div><div class="build"><b>Progression</b><p></p><p></p></div>`;
-  card.querySelector(".player").textContent=p.name;
-  card.querySelectorAll(".build p")[0].textContent=p.build;
-  card.querySelectorAll(".build p")[1].textContent=p.note;
-  cards.appendChild(card);
-  card.addEventListener("click",()=>{
- document.getElementById("detailName").textContent=p.name;
- document.getElementById("detailPosition").textContent="Position: "+p.pos;
- document.getElementById("detailRating").textContent="Rating: "+p.rating+" (demo)";
- document.getElementById("detailRole").textContent="Playstyle: "+p.role;
- document.getElementById("detailBuild").textContent="Progression: "+p.build;
- document.getElementById("detailNote").textContent=p.note;
- document.getElementById("detailOverlay").style.display="flex";
-});
- });
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://mbuylcdrqtiglrymthde.supabase.co";
+const SUPABASE_KEY = "sb_publishable_P6lsx5pqe3Nuv9kB-Ragxg_bJPzpdhc";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let players = [];
+let malayalam = false;
+
+const cards = document.getElementById("cards");
+
+async function loadPlayers() {
+  const notice = document.getElementById("notice");
+  notice.textContent = "Connecting to player database...";
+
+  const { data, error } = await supabaseClient
+    .from("player_cards")
+    .select("id, player_name, card_name, card_type, position, overall_rating, playstyle, image_url, stats")
+    .eq("is_published", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Supabase error:", error);
+    notice.textContent =
+      "Could not load player cards. Check your Supabase connection and database permissions.";
+    players = [];
+    render();
+    return;
+  }
+
+  players = (data || []).map(p => ({
+    id: p.id,
+    name: p.player_name,
+    cardName: p.card_name || "",
+    pos: p.position || "N/A",
+    rating: p.overall_rating ?? "—",
+    role: p.playstyle || p.card_type || "Not specified",
+    build: "Player card loaded from database.",
+    note: p.card_name
+      ? "Card: " + p.card_name
+      : "Progression build information will appear when published.",
+    image: p.image_url || "",
+    stats: p.stats || {}
+  }));
+
+  notice.textContent = players.length
+    ? "Connected to database · " + players.length + " published player card(s)"
+    : "Database connected. No published player cards yet. Add a card in Supabase and set Published to true.";
+
+  render();
 }
-document.getElementById("searchBtn").addEventListener("click",render);
-document.getElementById("search").addEventListener("input",render);
-document.getElementById("position").addEventListener("change",render);
-document.getElementById("sort").addEventListener("change",render);
-document.getElementById("year").textContent=new Date().getFullYear();
-document.getElementById("langBtn").addEventListener("click",()=>{
- malayalam=!malayalam;
- document.getElementById("langBtn").textContent=malayalam?"English":"മലയാളം";
- document.getElementById("intro").textContent=malayalam?"നിങ്ങളുടെ ഇഷ്ടപ്പെട്ട eFootball കളിക്കാരുടെ build തിരയൂ, positions താരതമ്യം ചെയ്യൂ, മികച്ച squad ഒരുക്കൂ.":"Find player progression builds, compare your options and create your best squad.";
- document.getElementById("search").placeholder=malayalam?"കളിക്കാരനെ തിരയുക — Gullit, Messi...":"Search player — Gullit, Messi...";
- document.getElementById("searchBtn").textContent=malayalam?"Build തിരയുക ↗":"Search Builds ↗";
- document.getElementById("buildTitle").textContent=malayalam?"Player Builds":"Explore Builds";
- document.getElementById("aboutTitle").textContent=malayalam?"From Calwiu-നെക്കുറിച്ച്":"About From Calwiu";
- document.getElementById("aboutText").textContent=malayalam?"eFootball ആരാധകർക്കുള്ള player progression വെബ്സൈറ്റ്. Builds തിരയൂ, positions താരതമ്യം ചെയ്യൂ, squad മെച്ചപ്പെടുത്തൂ.":"A player progression resource for eFootball fans. Search builds, compare positions and find ideas for your next squad.";
- document.getElementById("notice").textContent=malayalam?"താഴെയുള്ള builds ഉദാഹരണങ്ങൾ മാത്രമാണ്. ഉപയോഗിക്കുന്നതിന് മുമ്പ് ഗെയിമിൽ player card-ഉം progression points-ഉം പരിശോധിക്കുക.":"Preview builds below are examples only. Verify player cards and progression points in-game before using them.";
- render();
-});
-document.getElementById("closeDetail").addEventListener("click",()=>{
- document.getElementById("detailOverlay").style.display="none";
+
+function render() {
+  const q = document.getElementById("search").value.toLowerCase().trim();
+  const pos = document.getElementById("position").value;
+
+  let list = players.filter(p =>
+    p.name.toLowerCase().includes(q) &&
+    (!pos || p.pos === pos)
+  );
+
+  if (document.getElementById("sort").value === "name") {
+    list.sort((a, b) => a.name.localeCompare(b.name));
+  } else {
+    list.sort((a, b) =>
+      (Number(b.rating) || 0) - (Number(a.rating) || 0)
+    );
+  }
+
+  cards.innerHTML = "";
+  document.getElementById("empty").style.display =
+    list.length ? "none" : "block";
+
+  document.getElementById("empty").textContent = players.length
+    ? "No matching players found. Try another name or position."
+    : "No published player cards to display yet.";
+
+  list.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const top = document.createElement("div");
+    top.className = "cardtop";
+
+    const left = document.createElement("div");
+    const position = document.createElement("div");
+    position.className = "position";
+    position.textContent = p.pos + " · PLAYER BUILD";
+
+    const name = document.createElement("div");
+    name.className = "player";
+    name.textContent = p.name;
+
+    left.append(position, name);
+
+    const rating = document.createElement("div");
+    rating.className = "rating";
+    rating.textContent = p.rating;
+
+    top.append(left, rating);
+    card.append(top);
+
+    const pills = document.createElement("div");
+    pills.className = "pills";
+
+    const role = document.createElement("span");
+    role.className = "pill";
+    role.textContent = p.role;
+
+    const source = document.createElement("span");
+    source.className = "pill";
+    source.textContent = "Database card";
+
+    pills.append(role, source);
+    card.append(pills);
+
+    const build = document.createElement("div");
+    build.className = "build";
+
+    const heading = document.createElement("b");
+    heading.textContent = "Progression";
+
+    const description = document.createElement("p");
+    description.textContent = p.build;
+
+    const note = document.createElement("p");
+    note.textContent = p.note;
+
+    build.append(heading, description, note);
+    card.append(build);
+
+    if (p.image) {
+      const img = document.createElement("img");
+      img.src = p.image;
+      img.alt = p.name + " player card";
+      img.loading = "lazy";
+      img.style.cssText =
+        "width:100%;max-height:240px;object-fit:contain;margin-top:12px";
+      card.insertBefore(img, build);
+    }
+
+    card.addEventListener("click", () => {
+      document.getElementById("detailName").textContent = p.name;
+      document.getElementById("detailPosition").textContent =
+        "Position: " + p.pos;
+      document.getElementById("detailRating").textContent =
+        "Rating: " + p.rating;
+      document.getElementById("detailRole").textContent =
+        "Playstyle: " + p.role;
+      document.getElementById("detailBuild").textContent =
+        "Progression: " + p.build;
+      document.getElementById("detailNote").textContent = p.note;
+
+      document.getElementById("detailOverlay").style.display = "flex";
+    });
+
+    cards.appendChild(card);
+  });
+}
+
+document.getElementById("searchBtn").addEventListener("click", render);
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("position").addEventListener("change", render);
+document.getElementById("sort").addEventListener("change", render);
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+document.getElementById("langBtn").addEventListener("click", () => {
+  malayalam = !malayalam;
+
+  document.getElementById("langBtn").textContent =
+    malayalam ? "English" : "മലയാളം";
+
+  document.getElementById("intro").textContent = malayalam
+    ? "നിങ്ങളുടെ ഇഷ്ടപ്പെട്ട eFootball കളിക്കാരെ തിരയൂ."
+    : "Find player progression builds, compare your options and create your best squad.";
+
+  document.getElementById("search").placeholder = malayalam
+    ? "കളിക്കാരനെ തിരയുക..."
+    : "Search player — Gullit, Messi...";
+
+  document.getElementById("searchBtn").textContent =
+    malayalam ? "Build തിരയുക ↗" : "Search Builds ↗";
+
+  document.getElementById("buildTitle").textContent =
+    malayalam ? "Player Builds" : "Explore Builds";
+
+  document.getElementById("aboutTitle").textContent =
+    malayalam ? "From Calwiu-നെക്കുറിച്ച്" : "About From Calwiu";
+
+  render();
 });
 
-document.getElementById("detailOverlay").addEventListener("click",(e)=>{
- if(e.target.id==="detailOverlay"){
-  document.getElementById("detailOverlay").style.display="none";
- }
+document.getElementById("closeDetail").addEventListener("click", () => {
+  document.getElementById("detailOverlay").style.display = "none";
 });
-render();
+
+document.getElementById("detailOverlay").addEventListener("click", e => {
+  if (e.target.id === "detailOverlay") {
+    document.getElementById("detailOverlay").style.display = "none";
+  }
+});
+
+loadPlayers();
+</script>
+  
 </script>
 </body>
 </html>
