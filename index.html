@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b12">
+<meta name="description" content="From Calwiu eFootball Build Lab — explore player progression builds, compare stats and find builds for your favourite eFootball players.">
+<title>From Calwiu | eFootball Build Lab</title>
+<style>
+:root{--bg:#080b12;--panel:#111722;--line:#253044;--text:#f4f7ff;--muted:#9ca9bd;--green:#a8ff60;--blue:#76b7ff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#172238 0,#080b12 52%);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+header{border-bottom:1px solid var(--line);padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:21px;font-weight:900;letter-spacing:1px}.logo span{color:var(--green)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.lang,.outline{background:#151d2a;color:white;border:1px solid #344259;padding:10px 14px;border-radius:10px}
+main{max-width:1100px;margin:auto;padding:34px 18px 60px}
+.hero{padding:30px 0 24px}
+.tag{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:bold}
+h1{font-size:clamp(34px,7vw,62px);line-height:1.02;margin:14px 0}
+h1 span{color:var(--green)}
+p{color:var(--muted);line-height:1.6}
+.searchrow{display:flex;gap:10px;margin:24px 0;flex-wrap:wrap}
+input,select{background:#111722;color:white;border:1px solid #344259;border-radius:11px;padding:14px;min-width:0}
+input{flex:1;min-width:180px}
+.primary{background:var(--green);color:#10150b;border:0;border-radius:11px;padding:14px 18px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}
+.stat,.card{background:linear-gradient(145deg,#151e2c,#0e131d);border:1px solid var(--line);border-radius:16px;padding:18px}
+.stat strong{display:block;font-size:24px;color:var(--green)}
+.stat small{color:var(--muted)}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:30px 0 14px}
+h2{font-size:23px;margin:0}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters select{padding:10px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cardtop{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.position{font-size:11px;color:var(--green);font-weight:bold;letter-spacing:1px}
+.player{font-size:22px;font-weight:900;margin:8px 0}
+.rating{font-size:28px;font-weight:900;color:var(--green)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.pill{background:#202b3d;color:#c8d7ed;padding:6px 9px;border-radius:7px;font-size:12px}
+.build{border-top:1px solid var(--line);padding-top:13px;margin-top:13px}
+.build b{color:#fff}
+.build p{margin:7px 0;font-size:14px}
+.notice{background:#101b27;border:1px solid #29405a;border-radius:12px;padding:13px;color:#b8c8dc;font-size:13px}
+.empty{display:none;text-align:center;padding:30px;color:var(--muted)}
+footer{border-top:1px solid var(--line);text-align:center;padding:25px;color:var(--muted);font-size:13px}
+@media(max-width:620px){.cards{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:20px}header{padding:15px 18px}main{padding-top:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">FROM <span>CALWIU</span></div>
+  <button class="lang" id="langBtn">മലയാളം</button>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="tag">YOUR eFOOTBALL BUILD LAB</div>
+    <h1>BUILD SMART.<br><span>PLAY BETTER.</span></h1>
+    <p id="intro">Find player progression builds, compare your options and create your best squad.</p>
+    <div class="searchrow">
+      <input id="search" placeholder="Search player — Gullit, Messi..." aria-label="Search players">
+      <button class="primary" id="searchBtn">Search Builds ↗</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>BUILD LAB</strong><small>Player progression</small></div>
+      <div class="stat"><strong>ALL ROLES</strong><small>CF · AMF · DMF · CMF</small></div>
+      <div class="stat"><strong>COMMUNITY</strong><small>Discover better builds</small></div>
+    </div>
+  </section>
+
+  <div class="notice" id="notice">Preview builds below are examples only. Verify player cards and progression points in-game before using them.</div>
+
+  <section>
+    <div class="sectionhead">
+      <h2 id="buildTitle">Explore Builds</h2>
+      <div class="filters">
+        <select id="position" aria-label="Filter position">
+          <option value="">All positions</option>
+          <option>CF</option><option>SS</option><option>AMF</option>
+          <option>CMF</option><option>DMF</option><option>CB</option>
+        </select>
+        <select id="sort" aria-label="Sort builds">
+          <option value="rating">Highest rating</option>
+          <option value="name">Player name</option>
+        </select>
+      </div>
+    </div>
+    <div class="cards" id="cards"></div>
+    <div class="empty" id="empty">No matching players found. Try another name or position.</div>
+  </section>
+
+  <section style="margin-top:30px">
+    <div class="sectionhead"><h2 id="aboutTitle">About From Calwiu</h2></div>
+    <div class="card">
+      <p id="aboutText">A player progression resource for eFootball fans. Search builds, compare positions and find ideas for your next squad.</p>
+      <p>Build data and recommendations will be expanded as verified player information is added.</p>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> From Calwiu · eFootball Build Lab<br>Independent fan project. Not affiliated with KONAMI.</footer>
+
+<script>
+const players = [
+ {name:"Ruud Gullit",pos:"CF",rating:95,role:"Target Forward / CF",build:"Example build — add verified progression points",note:"Check finishing, physical contact and speed for your chosen card."},
+ {name:"Lionel Messi",pos:"AMF",rating:96,role:"Creative Playmaker",build:"Example build — add verified progression points",note:"Adjust dribbling, passing and finishing to your card and playstyle."},
+ {name:"Kylian Mbappé",pos:"CF",rating:95,role:"Goal Poacher",build:"Example build — add verified progression points",note:"Consider speed, acceleration and finishing for a quick striker."},
+ {name:"Jude Bellingham",pos:"CMF",rating:93,role:"Box-to-Box",build:"Example build — add verified progression points",note:"Balance stamina, passing, ball control and defensive contribution."},
+ {name:"Rodri",pos:"DMF",rating:94,role:"Anchor Man",build:"Example build — add verified progression points",note:"Consider defensive awareness, ball winning and passing."},
+ {name:"Virgil van Dijk",pos:"CB",rating:94,role:"Build Up",build:"Example build — add verified progression points",note:"Consider defensive awareness, physical contact and aerial ability."}
+];
+let malayalam=false;
+const cards=document.getElementById("cards");
+function render(){
+ const q=document.getElementById("search").value.toLowerCase().trim();
+ const pos=document.getElementById("position").value;
+ let list=players.filter(p=>p.name.toLowerCase().includes(q)&&(!pos||p.pos===pos));
+ if(document.getElementById("sort").value==="name")list.sort((a,b)=>a.name.localeCompare(b.name));
+ else list.sort((a,b)=>b.rating-a.rating);
+ cards.innerHTML="";
+ document.getElementById("empty").style.display=list.length?"none":"block";
+ list.forEach(p=>{
+  const card=document.createElement("article");card.className="card";
+  card.innerHTML=`<div class="cardtop"><div><div class="position">${p.pos} · PLAYER BUILD</div><div class="player"></div></div><div class="rating">${p.rating}</div></div><div class="pills"><span class="pill">${p.role}</span><span class="pill">Example data</span></div><div class="build"><b>Progression</b><p></p><p></p></div>`;
+  card.querySelector(".player").textContent=p.name;
+  card.querySelectorAll(".build p")[0].textContent=p.build;
+  card.querySelectorAll(".build p")[1].textContent=p.note;
+  cards.appendChild(card);
+ });
+}
+document.getElementById("searchBtn").addEventListener("click",render);
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("position").addEventListener("change",render);
+document.getElementById("sort").addEventListener("change",render);
+document.getElementById("year").textContent=new Date().getFullYear();
+document.getElementById("langBtn").addEventListener("click",()=>{
+ malayalam=!malayalam;
+ document.getElementById("langBtn").textContent=malayalam?"English":"മലയാളം";
+ document.getElementById("intro").textContent=malayalam?"നിങ്ങളുടെ ഇഷ്ടപ്പെട്ട eFootball കളിക്കാരുടെ build തിരയൂ, positions താരതമ്യം ചെയ്യൂ, മികച്ച squad ഒരുക്കൂ.":"Find player progression builds, compare your options and create your best squad.";
+ document.getElementById("search").placeholder=malayalam?"കളിക്കാരനെ തിരയുക — Gullit, Messi...":"Search player — Gullit, Messi...";
+ document.getElementById("searchBtn").textContent=malayalam?"Build തിരയുക ↗":"Search Builds ↗";
+ document.getElementById("buildTitle").textContent=malayalam?"Player Builds":"Explore Builds";
+ document.getElementById("aboutTitle").textContent=malayalam?"From Calwiu-നെക്കുറിച്ച്":"About From Calwiu";
+ document.getElementById("aboutText").textContent=malayalam?"eFootball ആരാധകർക്കുള്ള player progression വെബ്സൈറ്റ്. Builds തിരയൂ, positions താരതമ്യം ചെയ്യൂ, squad മെച്ചപ്പെടുത്തൂ.":"A player progression resource for eFootball fans. Search builds, compare positions and find ideas for your next squad.";
+ document.getElementById("notice").textContent=malayalam?"താഴെയുള്ള builds ഉദാഹരണങ്ങൾ മാത്രമാണ്. ഉപയോഗിക്കുന്നതിന് മുമ്പ് ഗെയിമിൽ player card-ഉം progression points-ഉം പരിശോധിക്കുക.":"Preview builds below are examples only. Verify player cards and progression points in-game before using them.";
+ render();
+});
+render();
+</script>
+</body>
+</html>
