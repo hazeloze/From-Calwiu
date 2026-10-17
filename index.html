@@ -1,962 +1,330 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080b12">
-<title>From Calwiu | eFootball Build Lab</title>
-
-<style>
-:root {
-  color-scheme:dark;
-  --bg:#080b12;
-  --panel:#111722;
-  --line:#253044;
-  --text:#f4f7ff;
-  --muted:#9ca9bd;
-  --green:#a8ff60;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:radial-gradient(ellipse at top,#1b2b43,#080b12 65%);
-  color:var(--text);
-  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-  line-height:1.6;
-}
-button,input,select,textarea { font:inherit; }
-button { cursor:pointer; }
-button:focus-visible,input:focus-visible,select:focus-visible,
-textarea:focus-visible { outline:2px solid var(--green);outline-offset:3px; }
-header {
-  position:sticky;top:0;z-index:10;
-  background:#080b12ed;border-bottom:1px solid var(--line);
-  padding:14px max(16px,calc((100% - 1050px)/2));
-  display:flex;justify-content:space-between;align-items:center;
-}
-.logo { font-size:21px;font-weight:950;letter-spacing:1px; }
-.logo span,h1 span,.tag { color:var(--green); }
-main { max-width:1050px;margin:auto;padding:25px 16px 50px; }
-.hero { padding:25px 0; }
-.tag { font-size:11px;letter-spacing:2px;font-weight:900; }
-h1 { font-size:clamp(36px,7vw,66px);line-height:1.02;letter-spacing:-2px; }
-h2 { margin:0;font-size:23px; }
-p { color:var(--muted); }
-.searchrow,.filters,.actions,.formbuttons {
-  display:flex;gap:10px;flex-wrap:wrap;
-}
-.searchrow { margin:22px 0; }
-.searchrow input { flex:1;min-width:180px; }
-input,select,textarea {
-  width:100%;min-width:0;padding:12px;
-  color:var(--text);background:#0d1420;
-  border:1px solid #344259;border-radius:10px;
-}
-.primary,.outline,.smallbtn {
-  border-radius:10px;padding:11px 15px;font-weight:800;
-}
-.primary { background:var(--green);color:#10150b;border:0; }
-.outline,.smallbtn {
-  background:#182235;color:white;border:1px solid #344259;
-}
-.stats,.cards { display:grid;gap:13px; }
-.stats { grid-template-columns:repeat(3,minmax(0,1fr));margin:25px 0; }
-.stat,.card,.adminbox {
-  padding:17px;border:1px solid var(--line);border-radius:16px;
-  background:linear-gradient(145deg,#151e2c,#0e131d);
-}
-.stat strong { display:block;color:var(--green);font-size:20px; }
-.stat small { color:var(--muted); }
-.notice {
-  padding:12px 14px;border:1px solid #29405a;
-  border-radius:11px;background:#101b27;color:#d2deed;
-  font-size:13px;margin:14px 0;overflow-wrap:anywhere;
-}
-.notice.error { background:#281319;border-color:#8e424a;color:#ffd0d0; }
-.notice.success { border-color:#3f7545;color:#d5ffd5; }
-.sectionhead {
-  display:flex;justify-content:space-between;align-items:center;
-  gap:12px;flex-wrap:wrap;margin:30px 0 15px;
-}
-.filters select { width:auto;min-width:145px; }
-.cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
-.card { overflow-wrap:anywhere;transition:.2s; }
-.playercard { cursor:pointer; }
-.playercard:hover { border-color:var(--green);transform:translateY(-2px); }
-.cardtop { display:flex;justify-content:space-between;gap:10px; }
-.position { color:var(--green);font-size:12px;font-weight:900; }
-.player { font-size:24px;font-weight:900;margin:5px 0; }
-.rating { color:var(--green);font-size:36px;font-weight:950;line-height:1.1; }
-.rating small { display:block;font-size:10px;text-align:right;color:var(--muted); }
-.pills { display:flex;gap:7px;flex-wrap:wrap;margin:12px 0; }
-.pill { background:#202b3d;color:#d3e0f4;padding:5px 9px;border-radius:7px;font-size:11px; }
-.build { border-top:1px solid var(--line);padding-top:12px;margin-top:12px; }
-.build p { margin:6px 0;font-size:14px;white-space:pre-wrap; }
-.playerphoto { width:100%;max-height:240px;object-fit:contain;margin:10px 0;border-radius:10px; }
-.empty { display:none;text-align:center;padding:30px;color:var(--muted); }
-.adminbox { margin-top:35px; }
-.admin-toggle { display:flex;justify-content:space-between;align-items:center;gap:10px; }
-.formgrid { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
-.field { display:flex;flex-direction:column;gap:6px; }
-.field label { font-size:12px;color:var(--muted); }
-.full { grid-column:1/-1; }
-.formbuttons { margin:14px 0; }
-.checkline { display:flex;align-items:center;gap:9px; }
-.checkline input { width:auto; }
-.adminstatus { color:var(--green);font-size:13px;overflow-wrap:anywhere; }
-.adminlist { display:grid;gap:8px;margin-top:14px; }
-.adminitem {
-  display:flex;justify-content:space-between;align-items:center;
-  flex-wrap:wrap;gap:10px;background:#182235;border-radius:10px;padding:12px;
-}
-.hidden { display:none!important; }
-.detailOverlay {
-  display:none;position:fixed;inset:0;z-index:50;
-  background:#000d;align-items:center;justify-content:center;padding:16px;
-}
-.detailBox {
-  width:100%;max-width:500px;max-height:90vh;overflow:auto;
-  background:var(--panel);border:1px solid #344259;border-radius:18px;padding:20px;
-}
-.detailBox h2 { color:var(--green);margin:15px 0; }
-.closeDetail { float:right; }
-footer { border-top:1px solid var(--line);text-align:center;padding:24px;color:var(--muted);font-size:12px; }
-#globalAlert {
-  position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
-  width:calc(100% - 24px);max-width:700px;z-index:100;
-  display:none;box-shadow:0 10px 35px #0009;
-}
-@media(max-width:640px) {
-  main { padding:15px 12px 35px; }
-  header { padding:12px; }
-  h1 { letter-spacing:-1px; }
-  .cards { grid-template-columns:1fr; }
-  .stats { gap:7px; }
-  .stat { padding:10px 8px; }
-  .stat strong { font-size:15px; }
-  .stat small { font-size:10px; }
-  .formgrid { grid-template-columns:1fr; }
-  .full { grid-column:auto; }
-  .filters,.filters select { width:100%; }
-  .searchrow .primary { width:100%; }
-}
+<meta name="description" content="From Calwiu eFootball Build Lab — explore player progression builds, compare stats and find builds for your favourite eFootball players.">
+<link rel="canonical" href="https://hazeloze.github.io/From-Calwiu/">
+<meta property="og:title" content="From Calwiu | eFootball Build Lab">
+<meta property="og:description" content="Explore eFootball player progression builds and squad-building ideas.">
+<meta property="og:url-weight:900;letter-spacing:1px}.logo span{color:var(--green)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.lang,.outline{background:#151d2a;color:white;border:1px solid #344259;padding:10px 14px;border-radius:10px}
+main{max-width:1100px;margin:auto;padding:34px 18px 60px}
+.hero{padding:30px 0 24px}
+.tag{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:bold}
+h1{font-size:clamp(34px,7vw,62px);line-height:1.02;margin:14px 0}
+h1 span{color:var(--green)}
+p{color:var(--muted);line-height:1.6}
+.searchrow{display:flex;gap:10px;margin:24px 0;flex-wrap:wrap}
+input,select{background:#111722;color:white;border:1px solid #344259;border-radius:11px;padding:14px;min-width:0}
+input{flex:1;min-width:180px}
+.primary{background:var(--green);color:#10150b;border:0;border-radius:11px;padding:14px 18px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}
+.stat,.card{background:linear-gradient(145deg,#151e2c,#0e131d);border:1px solid var(--line);border-radius:16px;padding:18px}
+.stat strong{display:block;font-size:24px;color:var(--green)}
+.stat small{color:var(--muted)}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:30px 0 14px}
+h2{font-size:23px;margin:0}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters select{padding:10px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cardtop{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.position{font-size:11px;color:var(--green);font-weight:bold;letter-spacing:1px}
+.player{font-size:22px;font-weight:900;margin:8px 0}
+.rating{font-size:28px;font-weight:900;color:var(--green)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.pill{background:#202b3d;color:#c8d7ed;padding:6px 9px;border-radius:7px;font-size:12px}
+.build{border-top:1px solid var(--line);padding-top:13px;margin-top:13px}
+.build b{color:#fff}
+.build p{margin:7px 0;font-size:14px}
+.notice{background:#101b27;border:1px solid #29405a;border-radius:12px;padding:13px;color:#b8c8dc;font-size:13px}
+.empty{display:none;text-align:center;padding:30px;color:var(--muted)}
+footer{border-top:1px solid var(--line);text-align:center;padding:25px;color:var(--muted);font-size:13px}.card{cursor:pointer;transition:transform .2s,border-color .2s}
+.card:hover{border-color:var(--green);transform:translateY(-3px)}
+.detailOverlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;display:none;align-items:center;justify-content:center;padding:18px}
+.detailBox{width:100%;max-width:480px;background:#111722;border:1px solid #344259;border-radius:18px;padding:24px}
+.detailBox h2{color:var(--green);margin-bottom:16px}
+.detailBox p{overflow-wrap:anywhere}
+.closeDetail{float:right;background:#253044;color:white;border:0;border-radius:8px;padding:9px 13px}
+@media(max-width:620px){.cards{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:20px}header{padding:15px 18px}main{padding-top:20px}}
 </style>
 </head>
-
 <body>
 <header>
-  <div class="logo">FROM <span>CALWIU</span></div>
-  <button class="outline" id="langBtn" type="button">മലയാളം</button>
+<div class="logo">FROM <span>CALWIU</span></div>
+<button class="lang" id="langBtn">മലയാളം</button>
 </header>
 
 <main>
-  <section class="hero">
-    <div class="tag">YOUR eFOOTBALL BUILD LAB</div>
-    <h1>BUILD SMART.<br><span>PLAY BETTER.</span></h1>
-    <p id="intro">Find player progression builds, compare your options and create your best squad.</p>
-    <div class="searchrow">
-      <input id="search" type="search" placeholder="Search players..." aria-label="Search players">
-      <button class="primary" id="searchBtn" type="button">Search Builds ↗</button>
-    </div>
-    <div class="stats">
-      <div class="stat"><strong>BUILD LAB</strong><small>Player progression</small></div>
-      <div class="stat"><strong>ALL ROLES</strong><small>CF · AMF · DMF · CMF · GK</small></div>
-      <div class="stat"><strong>COMMUNITY</strong><small>Discover better builds</small></div>
-    </div>
-  </section>
-
-  <div class="notice" id="notice" role="status">Loading player cards...</div>
-
-  <section>
-    <div class="sectionhead">
-      <h2 id="buildTitle">Explore Builds</h2>
-      <div class="filters">
-        <select id="position" aria-label="Filter by position">
-          <option value="">All positions</option>
-          <option>CF</option><option>SS</option><option>AMF</option>
-          <option>CMF</option><option>DMF</option><option>CB</option>
-          <option>GK</option><option>RWF</option><option>LWF</option>
-          <option>LB</option><option>RB</option>
-        </select>
-        <select id="sort" aria-label="Sort players">
-          <option value="rating">Highest rating</option>
-          <option value="name">Player name</option>
-          <option value="rating-low">Lowest rating</option>
-        </select>
-      </div>
-    </div>
-    <div class="cards" id="cards"></div>
-    <div class="empty" id="empty">No matching players found.</div>
-  </section>
-
-  <section>
-    <div class="sectionhead"><h2 id="aboutTitle">About From Calwiu</h2></div>
-    <div class="card">
-      <p id="aboutText">A player progression resource for eFootball fans.</p>
-      <p>Independent fan project. Not affiliated with KONAMI.</p>
-    </div>
-  </section>
-
-  <section class="adminbox" id="adminSection">
-    <div class="admin-toggle">
-      <div><div class="tag">PRIVATE AREA</div><h2>Admin Panel 🔐</h2></div>
-      <button class="outline" id="adminToggle" type="button" aria-expanded="true">Hide panel</button>
-    </div>
-    <p>Admin login ഉപയോഗിച്ച് player cards add, edit, publish ചെയ്യാം.</p>
-
-    <div id="adminContent">
-      <div id="loginArea">
-        <div class="formgrid">
-          <div class="field">
-            <label for="adminEmail">Admin email</label>
-            <input id="adminEmail" type="email" autocomplete="username" placeholder="Admin email">
-          </div>
-          <div class="field">
-            <label for="adminPassword">Password</label>
-            <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Admin password">
-          </div>
-        </div>
-        <div class="formbuttons">
-          <button class="primary" id="loginBtn" type="button">Admin Login</button>
-        </div>
-      </div>
-
-      <div id="adminArea" class="hidden">
-        <p id="signedInAs"></p>
-        <div class="formbuttons">
-          <button class="outline" id="safwanTemplate" type="button">Safwan 110 Template 👑</button>
-          <button class="outline" id="newPlayerBtn" type="button">+ New Player</button>
-          <button class="outline" id="logoutBtn" type="button">Logout</button>
-        </div>
-
-        <form id="playerForm">
-          <input id="editId" type="hidden">
-          <div class="formgrid">
-            <div class="field">
-              <label for="playerName">Player name *</label>
-              <input id="playerName" required maxlength="100" placeholder="Safwan">
-            </div>
-            <div class="field">
-              <label for="cardName">Card name</label>
-              <input id="cardName" maxlength="120" placeholder="The Boss">
-            </div>
-            <div class="field">
-              <label for="playerPosition">Position *</label>
-              <select id="playerPosition" required>
-                <option>CF</option><option>SS</option><option>AMF</option>
-                <option>CMF</option><option>DMF</option><option>CB</option>
-                <option>GK</option><option>RWF</option><option>LWF</option>
-                <option>LB</option><option>RB</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="playerRating">Overall rating *</label>
-              <input id="playerRating" type="number" min="1" max="120" value="110" required>
-            </div>
-            <div class="field">
-              <label for="playerStyle">Playstyle</label>
-              <input id="playerStyle" placeholder="Goal Poacher">
-            </div>
-            <div class="field">
-              <label for="playerType">Card type</label>
-              <input id="playerType" placeholder="Special Fun Card">
-            </div>
-            <div class="field full">
-              <label for="playerImage">Player image URL (https://)</label>
-              <input id="playerImage" type="url" placeholder="https://example.com/player.jpg">
-            </div>
-            <div class="field full">
-              <label for="playerDialogue">Fun dialogue / description</label>
-              <textarea id="playerDialogue" rows="3" placeholder="Player dialogue..."></textarea>
-            </div>
-            <div class="field full">
-              <label for="playerBuild">Progression notes</label>
-              <textarea id="playerBuild" rows="3" placeholder="Player build information..."></textarea>
-            </div>
-            <div class="field full">
-              <label class="checkline">
-                <input id="playerPublished" type="checkbox" checked>
-                Publish this player on the website
-              </label>
-            </div>
-          </div>
-          <div class="formbuttons">
-            <button class="primary" id="savePlayerBtn" type="submit">Save Player</button>
-            <button class="outline" id="cancelEditBtn" type="button">Clear Form</button>
-          </div>
-        </form>
-
-        <div class="adminstatus" id="adminStatus" role="status" aria-live="polite"></div>
-        <h3>Manage Cards</h3>
-        <div id="adminList" class="adminlist"></div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<div class="detailOverlay" id="detailOverlay" role="dialog" aria-modal="true" aria-labelledby="detailName">
-  <div class="detailBox">
-    <button class="outline closeDetail" id="closeDetail" type="button">✕ Close</button>
-    <h2 id="detailName">Player Details</h2>
-    <img id="detailImage" class="playerphoto hidden" alt="Player card">
-    <p id="detailPosition"></p>
-    <div id="detailRating" class="rating"></div>
-    <p id="detailRole"></p>
-    <p id="detailBuild"></p>
-    <p id="detailNote"></p>
-  </div>
+<section class="hero">
+<div class="tag">YOUR eFOOTBALL BUILD LAB</div>
+<h1>BUILD SMART.<br><span>PLAY BETTER.</span></h1>
+<p id="intro">Find player progression builds, compare your options and create your best squad.</p>
+<div class="searchrow">
+<input id="search" placeholder="Search player — Gullit, Messi..." aria-label="Search players">
+<button class="primary" id="searchBtn">Search Builds ↗</button>
 </div>
+<div class="stats">
+<div class="stat"><strong>BUILD LAB</strong><small>Player progression</small></div>
+<div class="stat"><strong>ALL ROLES</strong><small>CF · AMF · DMF · CMF</small></div>
+<div class="stat"><strong>COMMUNITY</strong><small>Discover better builds</small></div>
+</div>
+</section>
 
-<div class="notice" id="globalAlert" role="alert" aria-live="assertive"></div>
+<div class="notice" id="notice">Preview builds below are examples only. Verify player cards and progression points in-game before using them.</div>
 
-<footer>
-  © <span id="year"></span> From Calwiu · eFootball Build Lab<br>
-  Independent fan project. Not affiliated with KONAMI.
-</footer>
+<section>
+<div class="sectionhead">
+<h2 id="buildTitle">Explore Builds</h2>
+<div class="filters">
+<select id="position" aria-label="Filter position">
+<option value="">All positions</option>
+<option>CF</option><option>SS</option><option>AMF</option>
+<option>CMF</option><option>DMF</option><option>CB</option>
+</select>
+<select id="sort" aria-label="Sort builds">
+<option value="rating">Highest rating</option>
+<option value="name">Player name</option>
+</select>
+</div>
+</div>
+<div class="cards" id="cards"></div>
+<div class="empty" id="empty">No matching players found. Try another name or position.</div>
+</section>
 
+<section style="margin-top:30px">
+<div class="sectionhead"><h2 id="aboutTitle">About From Calwiu</h2></div>
+<div class="card">
+<p id="aboutText">A player progression resource for eFootball fans. Search builds, compare positions and find ideas for your next squad.</p>
+<p>Build data and recommendations will be expanded as verified player information is added.</p>
+</div>
+</section>
+</main>
+<div class="detailOverlay" id="detailOverlay">
+<div class="detailBox">
+<button class="closeDetail" id="closeDetail">✕ Close</button>
+<h2 id="detailName">Player Details</h2>
+<p id="detailPosition"></p>
+<p id="detailRating"></p>
+<p id="detailRole"></p>
+<p id="detailBuild"></p>
+<p id="detailNote"></p>
+<p>Note: Example information only. Verified progression points have not been added yet.</p>
+</div>
+</div>
+<footer>© <span id="year"></span> From Calwiu · eFootball Build Lab<br>Independent fan project. Not affiliated with KONAMI.</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-'use strict';
+const SUPABASE_URL = "https://mbuylcdrqtiglrymthde.supabase.co";
+const SUPABASE_KEY = "sb_publishable_P6lsx5pqe3Nuv9kB-Ragxg_bJPzpdhc";
 
-/* Supabase configuration */
-const SUPABASE_URL = 'https://mbuylcdrqtiglrymthde.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_P6lsx5pqe3Nuv9kB-Ragxg_bJPzpdhc';
-const ADMIN_UID = '87f10fd1-2024-490e-a042-2388adb6899c';
+const supabaseClient = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
-const supabaseClient = window.supabase
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-  : null;
-
-const el = id => document.getElementById(id);
-
-const FUN_PLAYERS = [
-  {
-    id:'fun-safwan', name:'Safwan', cardName:'The Boss',
-    pos:'CF', rating:110, role:'Goal Poacher',
-    type:'Special Fun Card', image:'', demo:true, published:true,
-    build:'Special fun player card. Not an official eFootball rating.',
-    note:'😂 110 Rating ആണ് മോനേ… Nerf ചെയ്യാൻ KONAMI പോലും പേടിക്കും! 🔥'
-  },
-  {
-    id:'fun-navas', name:'Navas', cardName:'The Wall',
-    pos:'GK', rating:97, role:'Goalkeeper',
-    type:'Special Fun Card', image:'', demo:true, published:true,
-    build:'Special fun player card. Not an official eFootball rating.',
-    note:'Navas — The Wall 🧤'
-  },
-  {
-    id:'fun-murshid', name:'Murshid', cardName:'Goal Machine',
-    pos:'CF', rating:98, role:'Goal Poacher',
-    type:'Special Fun Card', image:'', demo:true, published:true,
-    build:'Special fun player card. Not an official eFootball rating.',
-    note:'Murshid — Goal Machine ⚽'
-  }
-];
-
-let players = [...FUN_PLAYERS];
-let databasePlayers = [];
-let currentSession = null;
+let players = [];
 let malayalam = false;
-let alertTimer = null;
 
-function message(text, type='error') {
-  const box = el('globalAlert');
-  box.textContent = text;
-  box.className = 'notice ' + (type === 'success' ? 'success' : 'error');
-  box.style.display = 'block';
-
-  clearTimeout(alertTimer);
-  alertTimer = setTimeout(() => {
-    box.style.display = 'none';
-  }, 9000);
-}
-
-function adminMessage(text, type='success') {
-  el('adminStatus').textContent = text;
-  if (text) message(text, type);
-}
-
-function normalizePlayer(p) {
-  const stats = p.stats && typeof p.stats === 'object' && !Array.isArray(p.stats)
-    ? p.stats : {};
-
-  return {
-    id:p.id,
-    name:String(p.player_name ?? p.name ?? 'Unknown Player'),
-    cardName:String(p.card_name ?? p.cardName ?? ''),
-    pos:String(p.position ?? p.pos ?? 'N/A'),
-    rating:Number(p.overall_rating ?? p.rating) || 0,
-    role:String(p.playstyle ?? p.role ?? 'Not specified'),
-    type:String(p.card_type ?? p.type ?? 'Player Card'),
-    build:String(stats.progression ?? p.build ?? 'Player card loaded from database.'),
-    note:String(stats.funDialogue ?? stats.note ?? p.note ?? ''),
-    image:String(p.image_url ?? p.image ?? ''),
-    demo:!!p.demo,
-    published:p.is_published ?? p.published ?? true
-  };
-}
-
-function mergePlayers() {
-  const databaseNames = new Set(
-    databasePlayers.map(p => p.name.trim().toLowerCase())
-  );
-
-  players = [
-    ...FUN_PLAYERS.filter(p => !databaseNames.has(p.name.trim().toLowerCase())),
-    ...databasePlayers
-  ];
-}
+const cards = document.getElementById("cards");
 
 async function loadPlayers() {
-  el('notice').className = 'notice';
-  el('notice').textContent = 'Connecting to player database...';
+const notice = document.getElementById("notice");
+notice.textContent = "Connecting to player database...";
 
-  try {
-    if (!supabaseClient) {
-      throw new Error('Supabase library could not load. Check your internet connection.');
-    }
+const { data, error } = await supabaseClient
+.from("player_cards")
+.select("id, player_name, card_name, card_type, position, overall_rating, playstyle, image_url, stats")
+.eq("is_published", true)
+.order("created_at", { ascending: false });
 
-    const {data, error} = await supabaseClient
-      .from('player_cards')
-      .select('id,player_name,card_name,card_type,position,overall_rating,playstyle,image_url,stats,is_published,created_at')
-      .eq('is_published', true)
-      .order('created_at', {ascending:false});
+if (error) {
+console.error("Supabase error:", error);
+notice.textContent =
+"Could not load player cards. Check your Supabase connection and database permissions.";
+players = [];
+render();
+return;
+}
 
-    if (error) throw error;
+players = (data || []).map(p => ({
+id: p.id,
+name: p.player_name,
+cardName: p.card_name || "",
+pos: p.position || "N/A",
+rating: p.overall_rating ?? "—",
+role: p.playstyle || p.card_type || "Not specified",
+build: "Player card loaded from database.",
+note: p.card_name
+? "Card: " + p.card_name
+: "Progression build information will appear when published.",
+image: p.image_url || "",
+stats: p.stats || {}
+}));
 
-    databasePlayers = (data || []).map(normalizePlayer);
-    mergePlayers();
+notice.textContent = players.length
+? "Connected to database · " + players.length + " published player card(s)"
+: "Database connected. No published player cards yet. Add a card in Supabase and set Published to true.";
 
-    el('notice').textContent =
-      'Database connected · ' + databasePlayers.length + ' published database card(s).';
-  } catch (error) {
-    console.error('Player loading error:', error);
-    databasePlayers = [];
-    players = [...FUN_PLAYERS];
-    el('notice').className = 'notice error';
-    el('notice').textContent =
-      'Database unavailable — showing built-in fun cards. ' +
-      (error.message || 'Unknown error');
-  }
-
-  render();
-
-  if (currentSession && currentSession.user.id === ADMIN_UID) {
-    await loadAdminList();
-  }
+render();
 }
 
 function render() {
-  const query = el('search').value.trim().toLowerCase();
-  const selectedPosition = el('position').value;
+const q = document.getElementById("search").value.toLowerCase().trim();
+const pos = document.getElementById("position").value;
 
-  const list = players
-    .filter(p =>
-      p.name.toLowerCase().includes(query) ||
-      p.cardName.toLowerCase().includes(query) ||
-      p.pos.toLowerCase().includes(query) ||
-      p.role.toLowerCase().includes(query)
-    )
-    .filter(p => !selectedPosition || p.pos === selectedPosition);
+let list = players.filter(p =>
+p.name.toLowerCase().includes(q) &&
+(!pos || p.pos === pos)
+);
 
-  if (el('sort').value === 'name') {
-    list.sort((a,b) => a.name.localeCompare(b.name));
-  } else if (el('sort').value === 'rating-low') {
-    list.sort((a,b) => a.rating - b.rating);
-  } else {
-    list.sort((a,b) => b.rating - a.rating);
-  }
-
-  const container = el('cards');
-  container.replaceChildren();
-  el('empty').style.display = list.length ? 'none' : 'block';
-
-  list.forEach(p => {
-    const card = document.createElement('article');
-    card.className = 'card playercard';
-    card.tabIndex = 0;
-    card.setAttribute('role','button');
-    card.setAttribute('aria-label','View ' + p.name + ' details');
-
-    const top = document.createElement('div');
-    top.className = 'cardtop';
-
-    const left = document.createElement('div');
-
-    const position = document.createElement('div');
-    position.className = 'position';
-    position.textContent = p.pos + ' · PLAYER BUILD';
-
-    const name = document.createElement('div');
-    name.className = 'player';
-    name.textContent = p.name;
-
-    const pills = document.createElement('div');
-    pills.className = 'pills';
-
-    const cardPill = document.createElement('span');
-    cardPill.className = 'pill';
-    cardPill.textContent = p.cardName || 'PLAYER CARD';
-
-    pills.append(cardPill);
-    left.append(position, name, pills);
-
-    const rating = document.createElement('div');
-    rating.className = 'rating';
-    rating.append(document.createTextNode(String(p.rating || '—')));
-
-    const ratingLabel = document.createElement('small');
-    ratingLabel.textContent = 'RATING';
-    rating.append(ratingLabel);
-
-    top.append(left, rating);
-    card.append(top);
-
-    if (p.image) {
-      const img = document.createElement('img');
-      img.className = 'playerphoto';
-      img.src = p.image;
-      img.alt = p.name + ' player card';
-      img.loading = 'lazy';
-      img.onerror = () => img.remove();
-      card.append(img);
-    }
-
-    const tags = document.createElement('div');
-    tags.className = 'pills';
-
-    [p.role, p.demo ? 'FUN CARD' : 'DATABASE CARD'].forEach(text => {
-      const pill = document.createElement('span');
-      pill.className = 'pill';
-      pill.textContent = text;
-      tags.append(pill);
-    });
-
-    card.append(tags);
-
-    const build = document.createElement('div');
-    build.className = 'build';
-
-    const heading = document.createElement('b');
-    heading.textContent = 'Progression';
-
-    const description = document.createElement('p');
-    description.textContent = p.build;
-
-    build.append(heading, description);
-
-    if (p.note) {
-      const note = document.createElement('p');
-      note.textContent = p.note;
-      build.append(note);
-    }
-
-    card.append(build);
-
-    card.addEventListener('click', () => showDetails(p));
-    card.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        showDetails(p);
-      }
-    });
-
-    if (currentSession &&
-        currentSession.user.id === ADMIN_UID && !p.demo) {
-      const editButton = document.createElement('button');
-      editButton.type = 'button';
-      editButton.className = 'outline';
-      editButton.textContent = 'Edit in Admin';
-      editButton.style.marginTop = '12px';
-
-      editButton.addEventListener('click', event => {
-        event.stopPropagation();
-        editPlayer(p);
-        el('adminSection').scrollIntoView({behavior:'smooth'});
-      });
-
-      card.append(editButton);
-    }
-
-    container.append(card);
-  });
+if (document.getElementById("sort").value === "name") {
+list.sort((a, b) => a.name.localeCompare(b.name));
+} else {
+list.sort((a, b) =>
+(Number(b.rating) || 0) - (Number(a.rating) || 0)
+);
 }
 
-function showDetails(p) {
-  el('detailName').textContent = p.name + (p.cardName ? ' — ' + p.cardName : '');
-  el('detailPosition').textContent = 'Position: ' + p.pos;
-el('detailRating').textContent = String(p.rating || '—');
-  el('detailRole').textContent = 'Playstyle: ' + p.role + ' · ' + p.type;
-  el('detailBuild').textContent = 'Progression: ' + p.build;
-  el('detailNote').textContent = p.note || '';
+cards.innerHTML = "";
+document.getElementById("empty").style.display =
+list.length ? "none" : "block";
 
-  const image = el('detailImage');
-  image.classList.add('hidden');
-  image.onload = () => image.classList.remove('hidden');
-  image.onerror = () => image.classList.add('hidden');
+document.getElementById("empty").textContent = players.length
+? "No matching players found. Try another name or position."
+: "No published player cards to display yet.";
 
-  if (p.image) {
-    image.src = p.image;
-  } else {
-    image.removeAttribute('src');
-  }
+list.forEach(p => {
+const card = document.createElement("article");
+card.className = "card";
 
-  el('detailOverlay').style.display = 'flex';
+const top = document.createElement("div");
+top.className = "cardtop";
+
+const left = document.createElement("div");
+const position = document.createElement("div");
+position.className = "position";
+position.textContent = p.pos + " · PLAYER BUILD";
+
+const name = document.createElement("div");
+name.className = "player";
+name.textContent = p.name;
+
+left.append(position, name);
+
+const rating = document.createElement("div");
+rating.className = "rating";
+rating.textContent = p.rating;
+
+top.append(left, rating);
+card.append(top);
+
+const pills = document.createElement("div");
+pills.className = "pills";
+
+const role = document.createElement("span");
+role.className = "pill";
+role.textContent = p.role;
+
+const source = document.createElement("span");
+source.className = "pill";
+source.textContent = "Database card";
+
+pills.append(role, source);
+card.append(pills);
+
+const build = document.createElement("div");
+build.className = "build";
+
+const heading = document.createElement("b");
+heading.textContent = "Progression";
+
+const description = document.createElement("p");
+description.textContent = p.build;
+
+const note = document.createElement("p");
+note.textContent = p.note;
+
+build.append(heading, description, note);
+card.append(build);
+
+if (p.image) {
+const img = document.createElement("img");
+img.src = p.image;
+img.alt = p.name + " player card";
+img.loading = "lazy";
+img.style.cssText =
+"width:100%;max-height:240px;object-fit:contain;margin-top:12px";
+card.insertBefore(img, build);
 }
 
-function closeDetails() {
-  el('detailOverlay').style.display = 'none';
-}
+card.addEventListener("click", () => {
+document.getElementById("detailName").textContent = p.name;
+document.getElementById("detailPosition").textContent =
+"Position: " + p.pos;
+document.getElementById("detailRating").textContent =
+"Rating: " + p.rating;
+document.getElementById("detailRole").textContent =
+"Playstyle: " + p.role;
+document.getElementById("detailBuild").textContent =
+"Progression: " + p.build;
+document.getElementById("detailNote").textContent = p.note;
 
-function clearPlayerForm() {
-  el('playerForm').reset();
-  el('editId').value = '';
-  el('playerRating').value = 110;
-  el('playerPublished').checked = true;
-  el('savePlayerBtn').textContent = 'Save Player';
-}
-
-function editPlayer(p) {
-  el('editId').value = p.id;
-  el('playerName').value = p.name;
-  el('cardName').value = p.cardName;
-  el('playerPosition').value = p.pos;
-  el('playerRating').value = p.rating;
-  el('playerStyle').value = p.role;
-  el('playerType').value = p.type;
-  el('playerImage').value = p.image;
-  el('playerDialogue').value = p.note;
-  el('playerBuild').value = p.build;
-  el('playerPublished').checked = !!p.published;
-  el('savePlayerBtn').textContent = 'Update Player';
-}
-
-async function loadAdminList() {
-  if (!currentSession || currentSession.user.id !== ADMIN_UID || !supabaseClient) return;
-
-  const {data, error} = await supabaseClient
-     .from('player_cards')
-    .select('id,player_name,overall_rating,position,is_published,card_name,card_type,playstyle,image_url,stats,created_at')
-    .order('created_at', {ascending:false});
-
-  if (error) {
-    adminMessage('Cards load ചെയ്യാനായില്ല: ' + error.message, 'error');
-    return;
-  }
-
-  const list = el('adminList');
-  list.replaceChildren();
-
-  (data || []).forEach(row => {
-    const p = normalizePlayer(row);
-    const item = document.createElement('div');
-    item.className = 'adminitem';
-
-    const label = document.createElement('span');
-    label.textContent =
-      p.name + ' · ' + p.pos + ' · ' + p.rating + ' · ' +
-      (p.published ? 'Published' : 'Unpublished');
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-
-    const edit = document.createElement('button');
-    edit.type = 'button';
-    edit.className = 'smallbtn';
-    edit.textContent = 'Edit';
-    edit.addEventListener('click', () => {
-      editPlayer(p);
-      el('playerForm').scrollIntoView({behavior:'smooth'});
-    });
-
-    const toggle = document.createElement('button');
-    toggle.type = 'button';
-    toggle.className = 'smallbtn';
-    toggle.textContent = p.published ? 'Unpublish' : 'Publish';
-
-    toggle.addEventListener('click', async () => {
-      const {error: updateError} = await supabaseClient
-        .from('player_cards')
-        .update({is_published: !p.published})
-          .eq('id', p.id);
-
-      if (updateError) {
-        adminMessage('Publish status മാറ്റാനായില്ല: ' + updateError.message, 'error');
-        return;
-      }
-
-      adminMessage('Publish status updated.', 'success');
-      await loadPlayers();
-    });
-
-    const remove = document.createElement('button');
-    remove.type = 'button';
-    remove.className = 'smallbtn';
-    remove.textContent = 'Delete';
-
-    remove.addEventListener('click', async () => {
-      if (!confirm(p.name + ' delete ചെയ്യണോ?')) return;
-
-      const {error: deleteError} = await supabaseClient
-        .from('player_cards')
-        .delete()
-        .eq('id', p.id);
-      if (deleteError) {
-        adminMessage('Delete ചെയ്യാനായില്ല: ' + deleteError.message, 'error');
-        return;
-      }
-
-      adminMessage('Player deleted.', 'success');
-      await loadPlayers();
-    });
-
-    actions.append(edit, toggle, remove);
-    item.append(label, actions);
-    list.append(item);
-  });
-
-  if (!data || data.length === 0) {
-    list.textContent = 'ഇതുവരെ database cards ഒന്നുമില്ല.';
-  }
-}
-
-async function savePlayer(event) {
-  event.preventDefault();
-  if (!currentSession || currentSession.user.id !== ADMIN_UID) {
-    adminMessage('Admin login ആവശ്യമാണ്.', 'error');
-    return;
-  }
-
-  const name = el('playerName').value.trim();
-  const rating = Number(el('playerRating').value);
-
-  if (!name || !Number.isFinite(rating) || rating < 1 || rating > 120) {
-    adminMessage('Player name-ഉം 1–120 ഇടയിലുള്ള rating-ഉം നൽകുക.', 'error');
-    return;
-  }
-
-  const imageUrl = el('playerImage').value.trim();
-
-  if (imageUrl && !/^https:\/\/\S+/i.test(imageUrl)) {
-    adminMessage('Image URL https:// ഉപയോഗിച്ച് തുടങ്ങണം.', 'error');
-    return;
-  }
-  const payload = {
-    player_name: name,
-    card_name: el('cardName').value.trim(),
-    position: el('playerPosition').value,
-    overall_rating: rating,
-    playstyle: el('playerStyle').value.trim(),
-    card_type: el('playerType').value.trim(),
-    image_url: imageUrl,
-    stats: {
-      progression: el('playerBuild').value.trim(),
-      funDialogue: el('playerDialogue').value.trim()
-    },
-    is_published: el('playerPublished').checked
-  };
-
-  const id = el('editId').value;
-  let result;
-
-  if (id) {
-    result = await supabaseClient
-      .from('player_cards')
-      .update(payload)
-      .eq('id', id);
-  } else {
-    result = await supabaseClient
-      .from('player_cards')
-      .insert(payload);
-  }
-
-  if (result.error) {
-    adminMessage('Save ചെയ്യാനായില്ല: ' + result.error.message, 'error');
-    return;
-  }
-
-  adminMessage(id ? 'Player updated successfully.' : 'New player added successfully.', 'success');
-  clearPlayerForm();
-  await loadPlayers();
-}
-
-async function loginAdmin() {
-  if (!supabaseClient) {
-    message('Supabase library load ആയിട്ടില്ല. Internet connection പരിശോധിക്കുക.');
-    return;
-  }
-
-  const email = el('adminEmail').value.trim();
-  const password = el('adminPassword').value;
-
-  if (!email || !password) {
-    message('Admin email-ഉം password-ഉം നൽകുക.');
-    return;
-    }
-
-  const email = el('adminEmail').value.trim();
-  const password = el('adminPassword').value;
-
-  if (!email || !password) {
-    message('Admin email-ഉം password-ഉം നൽകുക.');
-    return;
-  }
-
-  const {data, error} = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    message('Login failed: ' + error.message);
-    return;
-  }
-
-  if (!data.user || data.user.id !== ADMIN_UID) {
-    await supabaseClient.auth.signOut();
-    message('ഈ account-ന് admin access ഇല്ല.');
-    return;
-  }
-  el('adminPassword').value = '';
-  setAdminUI(data.session);
-  message('Admin login successful.', 'success');
-}
-
-async function logoutAdmin() {
-  if (!supabaseClient) return;
-
-  const {error} = await supabaseClient.auth.signOut();
-
-  if (error) {
-    message('Logout error: ' + error.message);
-    return;
-  }
-
-  setAdminUI(null);
-  clearPlayerForm();
-  message('Logged out.', 'success');
-}
-
-function setAdminUI(session) {
-  const allowed = !!session && session.user.id === ADMIN_UID;
-  currentSession = allowed ? session : null;
-
-  el('loginArea').classList.toggle('hidden', allowed);
- el('adminArea').classList.toggle('hidden', !allowed);
-
-  if (allowed) {
-    el('signedInAs').textContent = 'Logged in as ' + session.user.email;
-    loadAdminList();
-  }
-
-  render();
-}
-
-function fillSafwanTemplate() {
-  clearPlayerForm();
-  el('playerName').value = 'Safwan';
-  el('cardName').value = 'The Boss';
-  el('playerPosition').value = 'CF';
-  el('playerRating').value = 110;
-  el('playerStyle').value = 'Goal Poacher';
-  el('playerType').value = 'Special Fun Card';
-  el('playerDialogue').value =
-    '😂 110 Rating ആണ് മോനേ… Nerf ചെയ്യാൻ KONAMI പോലും പേടിക്കും! 🔥';
-  el('playerBuild').value =
-    'Special fun player card. Not an official eFootball rating.';
-  el('playerPublished').checked = true;
-  el('adminStatus').textContent = 'Safwan template loaded. Save ചെയ്യാൻ തയ്യാറാണ്.';
-}
-  function setupLanguageToggle() {
-  el('langBtn').addEventListener('click', () => {
-    malayalam = !malayalam;
-    el('langBtn').textContent = malayalam ? 'English' : 'മലയാളം';
-
-    el('intro').textContent = malayalam
-      ? 'Player builds കണ്ടെത്തൂ, താരതമ്യം ചെയ്യൂ, നിങ്ങളുടെ മികച്ച squad ഒരുക്കൂ.'
-      : 'Find player progression builds, compare your options and create your best squad.';
-      el('buildTitle').textContent = malayalam ? 'Player Builds' : 'Explore Builds';
-    el('aboutTitle').textContent = malayalam ? 'From Calwiu-നെക്കുറിച്ച്' : 'About From Calwiu';
-
-    el('aboutText').textContent = malayalam
-      ? 'eFootball ആരാധകർക്കായുള്ള player progression resource.'
-      : 'A player progression resource for eFootball fans.';
-
-    el('search').placeholder = malayalam ? 'Player തിരയുക...' : 'Search players...';
-    el('searchBtn').textContent = malayalam ? 'തിരയുക ↗' : 'Search Builds ↗';
-  });
-}
-
-/* Search and filters */
-el('search').addEventListener('input', render);
-el('searchBtn').addEventListener('click', render);
-el('position').addEventListener('change', render);
-el('sort').addEventListener('change', render);
-  /* Player details */
-el('closeDetail').addEventListener('click', closeDetails);
-el('detailOverlay').addEventListener('click', event => {
-  if (event.target === el('detailOverlay')) closeDetails();
-});
-document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') closeDetails();
+document.getElementById("detailOverlay").style.display = "flex";
 });
 
-/* Admin controls */
-el('adminToggle').addEventListener('click', () => {
-  const content = el('adminContent');
-  const hide = !content.classList.contains('hidden');
+cards.appendChild(card);
+});
+}
 
-  content.classList.toggle('hidden', hide);
-  el('adminToggle').textContent = hide ? 'Show panel' : 'Hide panel';
-  el('adminToggle').setAttribute('aria-expanded', String(!hide));
+document.getElementById("searchBtn").addEventListener("click", render);
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("position").addEventListener("change", render);
+document.getElementById("sort").addEventListener("change", render);
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+document.getElementById("langBtn").addEventListener("click", () => {
+malayalam = !malayalam;
+
+document.getElementById("langBtn").textContent =
+malayalam ? "English" : "മലയാളം";
+
+document.getElementById("intro").textContent = malayalam
+? "നിങ്ങളുടെ ഇഷ്ടപ്പെട്ട eFootball കളിക്കാരെ തിരയൂ."
+: "Find player progression builds, compare your options and create your best squad.";
+
+document.getElementById("search").placeholder = malayalam
+? "കളിക്കാരനെ തിരയുക..."
+: "Search player — Gullit, Messi...";
+
+document.getElementById("searchBtn").textContent =
+malayalam ? "Build തിരയുക ↗" : "Search Builds ↗";
+
+document.getElementById("buildTitle").textContent =
+malayalam ? "Player Builds" : "Explore Builds";
+
+document.getElementById("aboutTitle").textContent =
+malayalam ? "From Calwiu-നെക്കുറിച്ച്" : "About From Calwiu";
+
+render();
 });
 
-el('loginBtn').addEventListener('click', loginAdmin);
-el('logoutBtn').addEventListener('click', logoutAdmin);
-  el('logoutBtn').addEventListener('click', logoutAdmin);
-el('playerForm').addEventListener('submit', savePlayer);
-el('cancelEditBtn').addEventListener('click', clearPlayerForm);
-el('newPlayerBtn').addEventListener('click', clearPlayerForm);
-el('safwanTemplate').addEventListener('click', fillSafwanTemplate);
+document.getElementById("closeDetail").addEventListener("click", () => {
+document.getElementById("detailOverlay").style.display = "none";
+});
 
-el('year').textContent = new Date().getFullYear();
-setupLanguageToggle();
-
-async function init() {
-  render();
-
-  if (!supabaseClient) {
-    el('notice').className = 'notice error';
-    el('notice').textContent =
-      'Supabase library load ആയില്ല. Internet connection പരിശോധിക്കുക.';
-    return;
-  }
-
-  const {data, error} = await supabaseClient.auth.getSession();
-
-  if (error) {console.error('Session error:', error);
-  }
-
-  if (data && data.session && data.session.user.id === ADMIN_UID) {
-    setAdminUI(data.session);
-  } else {
-    setAdminUI(null);
-  }
-
-  supabaseClient.auth.onAuthStateChange((_event, session) => {
-    if (session && session.user.id === ADMIN_UID) {
-      setAdminUI(session);
-    } else {
-      currentSession = null;
-      el('loginArea').classList.remove('hidden');
-      el('adminArea').classList.add('hidden');
-      render();
-    }
-  });
-
-  await loadPlayers();
+document.getElementById("detailOverlay").addEventListener("click", e => {
+if (e.target.id === "detailOverlay") {
+document.getElementById("detailOverlay").style.display = "none";
 }
-  init();
+});
+
+loadPlayers();
 </script>
 </body>
 </html>
-    
