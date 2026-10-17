@@ -52,7 +52,13 @@ h2{font-size:23px;margin:0}
 .build p{margin:7px 0;font-size:14px}
 .notice{background:#101b27;border:1px solid #29405a;border-radius:12px;padding:13px;color:#b8c8dc;font-size:13px}
 .empty{display:none;text-align:center;padding:30px;color:var(--muted)}
-footer{border-top:1px solid var(--line);text-align:center;padding:25px;color:var(--muted);font-size:13px}
+footer{border-top:1px solid var(--line);text-align:center;padding:25px;color:var(--muted);font-size:13px}.card{cursor:pointer;transition:transform .2s,border-color .2s}
+.card:hover{border-color:var(--green);transform:translateY(-3px)}
+.detailOverlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;display:none;align-items:center;justify-content:center;padding:18px}
+.detailBox{width:100%;max-width:480px;background:#111722;border:1px solid #344259;border-radius:18px;padding:24px}
+.detailBox h2{color:var(--green);margin-bottom:16px}
+.detailBox p{overflow-wrap:anywhere}
+.closeDetail{float:right;background:#253044;color:white;border:0;border-radius:8px;padding:9px 13px}
 @media(max-width:620px){.cards{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:20px}header{padding:15px 18px}main{padding-top:20px}}
 </style>
 </head>
@@ -107,7 +113,18 @@ footer{border-top:1px solid var(--line);text-align:center;padding:25px;color:var
     </div>
   </section>
 </main>
-
+<div class="detailOverlay" id="detailOverlay">
+  <div class="detailBox">
+    <button class="closeDetail" id="closeDetail">✕ Close</button>
+    <h2 id="detailName">Player Details</h2>
+    <p id="detailPosition"></p>
+    <p id="detailRating"></p>
+    <p id="detailRole"></p>
+    <p id="detailBuild"></p>
+    <p id="detailNote"></p>
+    <p>Note: Example information only. Verified progression points have not been added yet.</p>
+  </div>
+</div>
 <footer>© <span id="year"></span> From Calwiu · eFootball Build Lab<br>Independent fan project. Not affiliated with KONAMI.</footer>
 
 <script>
@@ -136,6 +153,15 @@ function render(){
   card.querySelectorAll(".build p")[0].textContent=p.build;
   card.querySelectorAll(".build p")[1].textContent=p.note;
   cards.appendChild(card);
+  card.addEventListener("click",()=>{
+ document.getElementById("detailName").textContent=p.name;
+ document.getElementById("detailPosition").textContent="Position: "+p.pos;
+ document.getElementById("detailRating").textContent="Rating: "+p.rating+" (demo)";
+ document.getElementById("detailRole").textContent="Playstyle: "+p.role;
+ document.getElementById("detailBuild").textContent="Progression: "+p.build;
+ document.getElementById("detailNote").textContent=p.note;
+ document.getElementById("detailOverlay").style.display="flex";
+});
  });
 }
 document.getElementById("searchBtn").addEventListener("click",render);
@@ -154,6 +180,15 @@ document.getElementById("langBtn").addEventListener("click",()=>{
  document.getElementById("aboutText").textContent=malayalam?"eFootball ആരാധകർക്കുള്ള player progression വെബ്സൈറ്റ്. Builds തിരയൂ, positions താരതമ്യം ചെയ്യൂ, squad മെച്ചപ്പെടുത്തൂ.":"A player progression resource for eFootball fans. Search builds, compare positions and find ideas for your next squad.";
  document.getElementById("notice").textContent=malayalam?"താഴെയുള്ള builds ഉദാഹരണങ്ങൾ മാത്രമാണ്. ഉപയോഗിക്കുന്നതിന് മുമ്പ് ഗെയിമിൽ player card-ഉം progression points-ഉം പരിശോധിക്കുക.":"Preview builds below are examples only. Verify player cards and progression points in-game before using them.";
  render();
+});
+document.getElementById("closeDetail").addEventListener("click",()=>{
+ document.getElementById("detailOverlay").style.display="none";
+});
+
+document.getElementById("detailOverlay").addEventListener("click",(e)=>{
+ if(e.target.id==="detailOverlay"){
+  document.getElementById("detailOverlay").style.display="none";
+ }
 });
 render();
 </script>
